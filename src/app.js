@@ -18,9 +18,10 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const config_1 = __importDefault(require("config"));
 const connect_1 = __importDefault(require("./utils/connect"));
+const logger_1 = __importDefault(require("./utils/logger"));
 const port = config_1.default.get("port");
 (0, connect_1.default)();
 app.use(express_1.default.json());
 app.listen(port, () => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(`App is running at http://localhost:${port}`);
+    logger_1.default.info(`App is running at http://localhost:${port}`);
 }));
