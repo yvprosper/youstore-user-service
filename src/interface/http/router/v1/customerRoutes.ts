@@ -1,30 +1,25 @@
  import express from "express";
  import { makeInvoker } from "awilix-express";
  import CustomerController from "../../controllers/customerController"
+//  const validator = require("express-joi-validation").createValidator({
+//     passError: true, // NOTE: this tells the module to pass the error along for you
+// });
 
  const api = makeInvoker(CustomerController);
  const router = express.Router();
 
  router
-      .route("/create")
+      .route("/")
       .post(api('create'))
+      .get(api('getAll'))
 
 
   router
       .route("/:customerId")
       .get(api('get'))
-
-  router
-      .route("/update/:customerId")
       .put(api('update'))
-
-  router
-      .route("/delete/:customerId")
       .delete(api('delete'))
 
-  router
-      .route("/all")
-      .get(api('getAll'))
 
 
   export default router;

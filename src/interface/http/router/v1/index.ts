@@ -1,18 +1,16 @@
 import express from "express";
 // import other routes
-//import dummyRouter from "./dummyRouter";
-
-//import userRouter from "./userRouter"
-
 
 import customerRoutes from "./customerRoutes"
+import merchantRoutes from "./merchantRoutes"
 
 const router = express.Router();
 
-router.use("/customer" , customerRoutes)
-// mount routes
-//router.use("/dummy", dummyRouter);
 
-//router.use("/user", userRouter)
+// mount routes
+router.use("/customers" , customerRoutes)
+
+router.use("/merchants" , merchantRoutes)
+
 
 export default router;

@@ -14,7 +14,13 @@ import GetCustomer from "./usecases/customers/getCustomer"
 import GetCustomers from "./usecases/customers/getCustomers"
 import UpdateCustomer from "./usecases/customers/updateCustomer"
 import DeleteCustomer from "./usecases/customers/deleteCustomer"
+import CreateMerchant from "./usecases/merchants/createMerchant"
+import GetMerchant from "./usecases/merchants/getMerchant"
+import GetMerchants from "./usecases/merchants/getMerchants"
+import UpdateMerchant from "./usecases/merchants/updateMerchant"
+import DeleteMerchant from "./usecases/merchants/deleteMerchant"
 import CustomerRepository from "./infra/repository/customerRepository"
+import MerchantRepository from "./infra/repository/merchantRepository"
 
 
 const container = createContainer({
@@ -41,7 +47,13 @@ container.register({
     getCustomers: asClass(GetCustomers),
     updateCustomer: asClass(UpdateCustomer),
     deleteCustomer: asClass(DeleteCustomer),
-    customerRepository: asClass(CustomerRepository)
+    createMerchant: asClass(CreateMerchant),
+    getMerchant: asClass(GetMerchant),
+    getMerchants: asClass(GetMerchants),
+    updateMerchant: asClass(UpdateMerchant),
+    deleteMerchant: asClass(DeleteMerchant),
+    customerRepository: asClass(CustomerRepository),
+    merchantRepository: asClass(MerchantRepository)
     
 
 })

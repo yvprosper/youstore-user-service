@@ -1,18 +1,24 @@
-//import {CustomerModel} from "../infra/database/models/mongoose/customer.model"
-//import { Document } from "mongoose"
-//import CustomerInput from "../infra/database/models/mongoose/customerModel"
+import bcrypt from "bcrypt"
+import NotFoundError from "../../interface/http/errors/notFound"
+import { CustomerDocument } from "../database/models/mongoose/customerModel"
+import CustomerModel from "../database/models/mongoose/customerModel"
+import log from "../../interface/http/utils/logger"
+
+
  class CustomerRepository {
-    customerModel: any
-    logger: any 
-    constructor({customerModel , logger}: any){
+    customerModel: typeof CustomerModel
+    logger: typeof log
+    constructor({customerModel , logger}: {customerModel: typeof CustomerModel, logger: typeof log}){
         this.customerModel = customerModel
         this.logger = logger
     }
 
-    async create (payload: any) {
+    async create (payload: CustomerDocument) {
             try {
-                const {fullName, phoneNo, address, avatar, email , password} = payload
-                const customer = await this.customerModel.create(payload);
+                let {fullName, phoneNo, address, avatar, email , password} = payload
+                const hashedPassword= await bcrypt.hash(password , 12)
+                password = hashedPassword
+                const customer = await this.customerModel.create({fullName, phoneNo, address, avatar, email , password});
                 const saveCustomer = await customer.save()
                 return saveCustomer
             } catch (error) {
@@ -20,7 +26,7 @@
             }
     }
 
-    async get (customerId: any) {
+    async get (customerId: String) {
             try {
                 const customer = await this.customerModel.findById(customerId)
                 return customer
@@ -31,9 +37,8 @@
     }
 
 
-    async getAll (payload: any) {
+    async getAll (payload: Object) {
         try {
-            const {page = 1, limit = 20 } = payload;
             const customers = await this.customerModel.find(payload)
             return customers
         } catch (error) {
@@ -43,7 +48,7 @@
     }
 
 
-    async update (customerId: any, payload: any) {
+    async update (customerId: String, payload: CustomerDocument) {
         try {
             const customer = await this.customerModel.findOneAndUpdate({_id: customerId}, payload, {
                 new: true
@@ -55,9 +60,12 @@
     }
 
 
-    async delete (customerId: any) {
+    async delete (customerId: String) {
             try {
-                const customer = await this.customerModel.findByIdAndDelete(customerId)
+                const customer = await this.customerModel.findOneAndDelete({_id: customerId})
+                if(!customer) {
+                    throw new NotFoundError('Customer with this ID does not exist' , 404, `error`)
+                }
                 return customer
             } catch (error) {
                 this.logger.error(error);

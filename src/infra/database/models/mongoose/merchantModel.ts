@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 
 export interface MerchantInput {
   fullName: string;
-  businessName: string;
+  storeName: string;
   phoneNo: string;
   avatar: string;
   address: string;
@@ -24,7 +24,7 @@ const merchantSchema = new mongoose.Schema(
        type: String,
        required: true
     },
-    businessName: { 
+    storeName: { 
         type: String,
         required: true
      },
