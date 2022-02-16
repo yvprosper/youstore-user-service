@@ -1,6 +1,6 @@
 import conflictError from "../../interface/http/errors/conflict"
 import HTTP_STATUS from "http-status-codes"
-//import { createCustomerSchema } from "../../interface/http/validations/customerValidations"
+import { createCustomerSchema } from "../../interface/http/validations/customerValidations"
 import CustomerRepository from "../../infra/repository/customerRepository"
 import CustomerModel from "../../infra/database/models/mongoose/customerModel"
 import { CustomerDocument } from "../../infra/database/models/mongoose/customerModel"
@@ -19,18 +19,19 @@ import log from "../../interface/http/utils/logger"
 
     async execute(payload: CustomerDocument) {
         try {
-            // const {error} = createCustomerSchema(payload)
-            // if (error)  return error.details[0].message
+            //validating user input
+            const {error} = createCustomerSchema(payload)
+            if (error)  throw new Error(` ${error.details[0].message}`)
+
+           //checking if user already exist
             const {email} = payload
             const alreadyExist = await this.customerModel.findOne({email: email})
-                 if (alreadyExist) {
-                    throw new conflictError('A Customer with this Email already exist',HTTP_STATUS.CONFLICT,`error`)
-                 } 
+            if (alreadyExist) throw new conflictError('A Customer with this Email already exist',HTTP_STATUS.CONFLICT,`error`)
+
             const customer = await this.customerRepository.create(payload)
             return customer
           
         } catch (error) {
-            //this.logger.error(error)
             throw error
         }
     }

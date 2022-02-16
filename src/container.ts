@@ -1,8 +1,6 @@
 import { asValue, Lifetime, asClass,asFunction, InjectionMode, createContainer} from "awilix"
 import {scopePerRequest} from "awilix-express"
-//const models = require("./infra/database/models/mongoose/customerModel")
 import database from "./infra/database/mongoose"
-//const CustomerController = require("./interface/http/controllers/customerController")
 import router from "./interface/http/router/routes"
 import restServer from "./interface/http/server"
 import Logger from "./interface/http/utils/logger"
@@ -14,13 +12,20 @@ import GetCustomer from "./usecases/customers/getCustomer"
 import GetCustomers from "./usecases/customers/getCustomers"
 import UpdateCustomer from "./usecases/customers/updateCustomer"
 import DeleteCustomer from "./usecases/customers/deleteCustomer"
+import UploadAvatar from "./usecases/customers/uploadAvatar"
+import AuthenticateCustomer from "./usecases/auth/customers/authenticateCustomer"
+import ChangeCustomerPassword from "./usecases/auth/customers/changePassword"
 import CreateMerchant from "./usecases/merchants/createMerchant"
 import GetMerchant from "./usecases/merchants/getMerchant"
 import GetMerchants from "./usecases/merchants/getMerchants"
 import UpdateMerchant from "./usecases/merchants/updateMerchant"
 import DeleteMerchant from "./usecases/merchants/deleteMerchant"
+import UploadPhoto from "./usecases/merchants/uploadPhoto"
+import AuthenticateMerchant from "./usecases/auth/merchants/authenticateMerchant"
+import ChangeMerchantPassword from "./usecases/auth/merchants/changePassword"
 import CustomerRepository from "./infra/repository/customerRepository"
 import MerchantRepository from "./infra/repository/merchantRepository"
+import Messenger from "./infra/libs/rabbitmq"
 
 
 const container = createContainer({
@@ -47,13 +52,20 @@ container.register({
     getCustomers: asClass(GetCustomers),
     updateCustomer: asClass(UpdateCustomer),
     deleteCustomer: asClass(DeleteCustomer),
+    uploadAvatar: asClass(UploadAvatar),
+    authenticateCustomer: asClass(AuthenticateCustomer),
+    changeCustomerPassword: asClass(ChangeCustomerPassword),
     createMerchant: asClass(CreateMerchant),
     getMerchant: asClass(GetMerchant),
     getMerchants: asClass(GetMerchants),
     updateMerchant: asClass(UpdateMerchant),
     deleteMerchant: asClass(DeleteMerchant),
+    uploadPhoto: asClass(UploadPhoto),
+    authenticateMerchant: asClass(AuthenticateMerchant),
+    changeMerchantPassword: asClass(ChangeMerchantPassword),
     customerRepository: asClass(CustomerRepository),
-    merchantRepository: asClass(MerchantRepository)
+    merchantRepository: asClass(MerchantRepository),
+    messenger: asClass(Messenger)
     
 
 })
@@ -68,7 +80,7 @@ container.register({
   container.loadModules(
     [
       [
-        "./infra/repository/*.ts",
+        "infra/repository/*.ts",
         {
           lifetime: Lifetime.SCOPED,
           register: asClass,
@@ -88,7 +100,7 @@ container.register({
 container.loadModules(
     [
       [
-        "./usecases/customers/*.ts",
+        "usecases/**/*.ts",
         {
           lifetime: Lifetime.SCOPED,
           register: asClass,

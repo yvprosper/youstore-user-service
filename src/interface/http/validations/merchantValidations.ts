@@ -1,10 +1,11 @@
 import Joi from "joi";
+import { MerchantDocument } from "../../../infra/database/models/mongoose/merchantModel";
 
 
 //const Joi = BaseJoi;
 
 // validation for creating a merchant
-export const createMerchantSchema = (user: string) => {
+export const createMerchantSchema = (user: MerchantDocument) => {
     const schema = Joi.object({
   fullName: Joi.string().required(),
   storeName: Joi.string().required(),

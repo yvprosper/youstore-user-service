@@ -72,6 +72,7 @@ import log from "../../interface/http/utils/logger"
                 
             }
     }
+
 }
 
 export default CustomerRepository

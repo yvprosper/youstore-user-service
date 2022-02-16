@@ -4,13 +4,15 @@ class Application {
     logger: any;
     config: any;
     shutdown: any;
+    messenger: any
 
 
-    constructor({ restServer, database, logger, config}: any) {
+    constructor({ restServer, database, logger, config, messenger}: any) {
         this.restServer = restServer;
         this.database = database;
         this.logger = logger;
         this.config = config;
+        this.messenger = messenger
     }
 
     async start() {
@@ -18,8 +20,10 @@ class Application {
             await this.database.connect();
             //this.logger.info("Connected to MongoDB");
 
-          }
-
+        }
+        this.logger.info('connecting to rabbitMq...')
+        await this.messenger.createChannel()
+        this.logger.info('connected to rabbitMq')
         await this.restServer.start();
     }
 

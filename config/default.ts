@@ -10,7 +10,17 @@ const config = {
     name: process.env.DATABASE_NAME,
     env: process.env.NODE_ENV,
     user: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASSWORD
+    password: process.env.DATABASE_PASSWORD,
+
+    //cloudinary 
+    cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+    apikey: process.env.CLOUDINARY_API_KEY,
+    apiSecret: process.env.CLOUDINARY_API_SECRET,
+
+    //JWT
+    customerSecret: process.env.CUSTOMER_JWT_SECRET,
+    merchantSecret: process.env.MERCHANT_JWT_SECRET,
+    
 
   };
   

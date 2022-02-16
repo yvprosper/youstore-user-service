@@ -1,9 +1,8 @@
 import express from "express";
 import { makeInvoker } from "awilix-express";
 import MerchantController from "../../controllers/merchantController";
-//  const validator = require("express-joi-validation").createValidator({
-//     passError: true, // NOTE: this tells the module to pass the error along for you
-// });
+import upload from "../../../../infra/libs/fileUploader";
+import { verifyMerchant } from "../../middlewares/verifyMerchantToken";
 
 const api = makeInvoker(MerchantController);
 const router = express.Router();
@@ -11,16 +10,16 @@ const router = express.Router();
 router
      .route("/")
      .post(api('create'))
-     .get(api('getAll'))
+     .get(api('getAll')) //admin route to be protected 
 
 
  router
-     .route("/:merchantId")
-     .get(api('get'))
-     .put(api('update'))
-     .delete(api('delete'))
+     .route("/")
+     .post(verifyMerchant, upload.single('avatar'), api('upload'))
+     .put(verifyMerchant, api('update'))
+     .delete(verifyMerchant, api('delete'))
 
-
+ router.get("/:merchantId", api('get') ) //admin route to be protected
 
  export default router;
 

@@ -1,14 +1,13 @@
 import { Request, Response } from "express";
+import _pick from "lodash/pick";
 import HTTP_STATUS from "http-status-codes"
-import { createCustomerSchema } from "../validations/customerValidations";
 import CreateCustomer from "../../../usecases/customers/createCustomer";
 import GetCustomer from "../../../usecases/customers/getCustomer";
 import UpdateCustomer from "../../../usecases/customers/updateCustomer";
 import DeleteCustomer from "../../../usecases/customers/deleteCustomer";
 import CustomerRepository from "../../../infra/repository/customerRepository";
 import GetCustomers from "../../../usecases/customers/getCustomers";
-//import { CustomerDocument } from "../../../infra/database/models/mongoose/customerModel";
-
+import UploadAvatar from "../../../usecases/customers/uploadAvatar";
 
 class CustomerController {
     createCustomer: CreateCustomer
@@ -16,24 +15,23 @@ class CustomerController {
     getCustomers: GetCustomers
     deleteCustomer: DeleteCustomer
     updateCustomer: UpdateCustomer
+    uploadAvatar: UploadAvatar
     customerRepository: CustomerRepository
-    constructor({createCustomer, customerRepository, getCustomer , getCustomers, updateCustomer, deleteCustomer}: 
+    constructor({createCustomer, customerRepository, getCustomer , getCustomers, updateCustomer, deleteCustomer, uploadAvatar}: 
         {createCustomer: CreateCustomer, getCustomer: GetCustomer, updateCustomer: UpdateCustomer, deleteCustomer: DeleteCustomer
-        getCustomers: GetCustomers, customerRepository: CustomerRepository}) {
+        getCustomers: GetCustomers, customerRepository: CustomerRepository, uploadAvatar: UploadAvatar}) {
         this.createCustomer = createCustomer
         this.getCustomer = getCustomer
         this.getCustomers = getCustomers
         this.updateCustomer = updateCustomer
         this.deleteCustomer = deleteCustomer
+        this.uploadAvatar = uploadAvatar
         this.customerRepository = customerRepository
     } 
 
 
     async create(req: Request , res: Response) {
         try {
-            const {error} = createCustomerSchema(req.body)
-            if (error) return res.status(400).json({success: false , msg: error.details[0].message})
-
             const payload = req.body
             const customer = await this.createCustomer.execute(payload)
             const response = {
@@ -48,10 +46,8 @@ class CustomerController {
             }
             res.status(HTTP_STATUS.CREATED).json({success: true , msg:`Customer account successfully created`,  data: response})
         }catch (error){
-            let errMessage = "A Customer with this Email already exist"
             if (error instanceof Error ) {
-                error.message==errMessage
-                res.status(HTTP_STATUS.CONFLICT).json({success: false , msg: `A Customer with this Email already exist`})
+                throw new Error(`${error.message}`)
             } 
             throw error
         }
@@ -82,7 +78,7 @@ class CustomerController {
 
     async update(req: Request , res: Response) {
         try {
-            const {customerId} = req.params
+            const customerId = req.user._id
             const payload = req.body
             const customer = await this.updateCustomer.execute(customerId, payload)
             if (!customer) return  res.status(400).json({success: false , msg: `Customer with this ID not found`})
@@ -105,7 +101,7 @@ class CustomerController {
 
     async delete(req: Request , res: Response) {
         try {
-            const {customerId} = req.params
+            const customerId = req.user._id
             const customer = await this.deleteCustomer.execute(customerId)
             if (!customer) return  res.status(404).json({success: false , msg: `Customer with this ID not found`})
             res.status(200).json({success: true , msg:`Customer details successfully removed from database`})
@@ -113,6 +109,20 @@ class CustomerController {
             res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({success: false , data: error})
         }
     }
+
+    async upload(req: Request , res: Response) {
+        try {
+            const customerId = req.user._id
+            const payload = req.file
+            const customer = await this.uploadAvatar.execute(payload, customerId)
+            if (!customer) return  res.status(400).json({success: false , msg: `Customer with this ID not found`})
+
+            res.status(200).json({success: true , msg:`Photo successfully uploaded`, data:  customer})
+        }catch (error){
+            res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({success: false , data: error})
+        }
+    }
+
 
 }
 
