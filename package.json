@@ -8,7 +8,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon build/src/start.js",
-    "build": "tsc"
+    "build": "tsc",
+    "start": "node src/start.ts"
   },
   "dependencies": {
     "@hapi/joi-date": "^2.0.1",
