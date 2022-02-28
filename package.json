@@ -11,7 +11,9 @@
     "dev": "nodemon build/src/start.js",
     "start": "node build/src/start.js"
   },
-  "engines": { "node": "12.18.3" },
+  "engines": {
+    "node": "12.18.3"
+  },
   "dependencies": {
     "@hapi/joi-date": "^2.0.1",
     "@types/hapi__joi": "^17.1.8",
