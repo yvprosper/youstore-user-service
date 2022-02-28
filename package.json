@@ -9,7 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "dev": "nodemon build/src/start.js",
-    "postinstall": "yarn build",
+    "postinstall": "npm run build",
     "start": "node build/src/start.js"
   },
   "engines": {
