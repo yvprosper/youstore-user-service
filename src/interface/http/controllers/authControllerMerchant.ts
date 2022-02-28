@@ -30,16 +30,18 @@ class MerchantAuth {
         const {token, merchant}: {token: string , merchant: MerchantDocument} = await this.authenticateMerchant.execute(payload)
 
         const response = {
-            _id: merchant?._id,
-            fullName: merchant?.fullName,
-            address: merchant?.address,
-            avatar: merchant?.avatar,
-            phoneNo: merchant?.phoneNo,
-            storeName: merchant?.storeName,
-            isVerified: merchant?.isVerified,
-            email: merchant?.email,
-            createdAt: merchant?.createdAt,
-            updatedAt: merchant?.updatedAt
+            _id: merchant._id,
+                storeName: merchant.storeName,
+                address: merchant.address,
+                avatar: merchant.avatar,
+                phoneNo: merchant.phoneNo,
+                email: merchant.email,
+                bankName: merchant.bankName,
+                accountName: merchant.accountName,
+                accountNo: merchant.accountNo,
+                isVerified: merchant.isVerified,
+                createdAt: merchant.createdAt,
+                updatedAt: merchant.updatedAt
         }
 
         res.status(200)

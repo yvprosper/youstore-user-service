@@ -9,7 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon build/src/start.js",
     "build": "tsc",
-    "start": "node src/start.ts"
+    "start": "node build/src/start.js"
   },
   "dependencies": {
     "@hapi/joi-date": "^2.0.1",

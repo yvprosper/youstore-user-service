@@ -39,7 +39,7 @@ import Config from "config"
      
             //  generating jwt token
             const token = await jwt.sign({
-                _id: merchant._id, fullName: merchant.fullName, 
+                _id: merchant._id, fullName: merchant.storeName, 
                 avatar: merchant.avatar, address: merchant.address,
                 email: merchant.email, phoneNo: merchant.phoneNo,
                 isVerified: merchant.isVerified, storeName: merchant.storeName

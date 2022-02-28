@@ -21,10 +21,10 @@ import Config from "config"
 
     async create (payload: MerchantDocument) {
             try {
-                let {fullName, storeName, phoneNo, address, avatar, email , password} = payload
+                let {bankName,accountName, accountNo, storeName, phoneNo, address, avatar, email , password} = payload
                 const hashedPassword= await bcrypt.hash(password , 12)
                 password = hashedPassword
-                const merchant = await this.merchantModel.create({fullName, storeName,  phoneNo, address, avatar, email , password});
+                const merchant = await this.merchantModel.create({bankName,accountName, accountNo, storeName, phoneNo, address, avatar, email , password});
                 const saveMerchant = await merchant.save()
                 
                 // creating an email verification token
