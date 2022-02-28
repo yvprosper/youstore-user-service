@@ -3,14 +3,20 @@ import NotFoundError from "../../interface/http/errors/notFound"
 import { MerchantDocument } from "../database/models/mongoose/merchantModel"
 import MerchantModel from "../database/models/mongoose/merchantModel"
 import log from "../../interface/http/utils/logger"
-
+import Messenger from "../libs/rabbitmq"
+import jwt from "jsonwebtoken"
+import Config from "config"
 
  class MerchantRepository {
     merchantModel: typeof MerchantModel
     logger: typeof log
-    constructor({merchantModel , logger}: {merchantModel: typeof MerchantModel, logger: typeof log}){
+    messenger: Messenger
+    config: typeof Config
+    constructor({merchantModel , logger, messenger, config}: {merchantModel: typeof MerchantModel, logger: typeof log, messenger: Messenger, config: typeof Config}){
         this.merchantModel = merchantModel
         this.logger = logger
+        this.messenger = messenger
+        this.config = config
     }
 
     async create (payload: MerchantDocument) {
@@ -20,6 +26,21 @@ import log from "../../interface/http/utils/logger"
                 password = hashedPassword
                 const merchant = await this.merchantModel.create({fullName, storeName,  phoneNo, address, avatar, email , password});
                 const saveMerchant = await merchant.save()
+                
+                // creating an email verification token
+                const secret = this.config.get('merchantEmailSecret') 
+                const token = jwt.sign({email: saveMerchant.email}, `${secret}`, {expiresIn: '1d'})
+                  
+                // creating an email verification link
+                const link = `http://localhost:5000/v1/auth/merchant/confirmation/${saveMerchant._id}/${token}`
+                
+
+                console.log(link)
+
+                //send to Queue
+                this.messenger.sendToQueue(`verify_merchant_email`, {link, saveMerchant})
+
+
                 return saveMerchant
             } catch (error) {
                 this.logger.error(error);

@@ -1,10 +1,10 @@
 import bcrypt from "bcrypt"
-import CustomerRepository from "../../../infra/repository/customerRepository"
-import CustomerModel from "../../../infra/database/models/mongoose/customerModel"
-import log from "../../../interface/http/utils/logger"
-import { changePasswordValidation } from "../../../interface/http/validations/customerValidations"
-import { CustomerDocument } from "../../../infra/database/models/mongoose/customerModel"
-import { IchangePassword } from "../../../interface/http/validations/customerValidations"
+import CustomerRepository from "../../infra/repository/customerRepository"
+import CustomerModel from "../../infra/database/models/mongoose/customerModel"
+import log from "../../interface/http/utils/logger"
+import { changePasswordValidation } from "../../interface/http/validations/customerValidations"
+import { CustomerDocument } from "../../infra/database/models/mongoose/customerModel"
+import { IchangePassword } from "../../interface/http/validations/customerValidations"
 import Config from "config"
 
 
@@ -29,7 +29,7 @@ import Config from "config"
             const {error} = changePasswordValidation({oldPassword, newPassword})
             if (error)  throw new Error(` ${error.details[0].message}`)
 
-            //checking if customer is registered and if oldPassword is correct
+            //checking if customer is registered
             const customer: CustomerDocument | null = await this.customerModel.findOne({_id: customerId})
             if (!customer) throw new Error('Customer with this ID not found')
 

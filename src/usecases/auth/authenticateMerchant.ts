@@ -1,11 +1,11 @@
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
-import MerchantRepository from "../../../infra/repository/merchantRepository"
-import MerchantModel from "../../../infra/database/models/mongoose/merchantModel"
-import log from "../../../interface/http/utils/logger"
-import { signInValidation } from "../../../interface/http/validations/customerValidations"
-import { MerchantDocument } from "../../../infra/database/models/mongoose/merchantModel"
-import { Iauth } from "../../../interface/http/validations/customerValidations"
+import MerchantRepository from "../../infra/repository/merchantRepository"
+import MerchantModel from "../../infra/database/models/mongoose/merchantModel"
+import log from "../../interface/http/utils/logger"
+import { signInValidation } from "../../interface/http/validations/customerValidations"
+import { MerchantDocument } from "../../infra/database/models/mongoose/merchantModel"
+import { Iauth } from "../../interface/http/validations/customerValidations"
 import Config from "config"
 
 
@@ -38,7 +38,12 @@ import Config from "config"
             if (!validPass) throw new Error('Your email or password is incorrect')
      
             //  generating jwt token
-            const token = await jwt.sign({_id: merchant._id}, this.config.get('merchantSecret'));
+            const token = await jwt.sign({
+                _id: merchant._id, fullName: merchant.fullName, 
+                avatar: merchant.avatar, address: merchant.address,
+                email: merchant.email, phoneNo: merchant.phoneNo,
+                isVerified: merchant.isVerified, storeName: merchant.storeName
+            }, this.config.get('merchantSecret'));
 
             return {token, merchant}
     }

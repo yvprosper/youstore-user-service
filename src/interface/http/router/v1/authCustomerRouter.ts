@@ -6,17 +6,15 @@ import { verifyCustomer } from "../../middlewares/verifyCustomerToken";
 const api = makeInvoker(CustomerAuth);
 const router = express.Router();
 
-router
-     .route("/customer")
-     .post(api('authenticate'))
+router.post("/",api('authenticate'))
      
+router.put("/change-password" , verifyCustomer, api('changePassword'))
+   
+router.post('/reset-password' , api('reset'))
 
+router.post('/reset-password/:id/:token', api('verify'))
 
- router
-     .route("/changepassword")
-     .put(verifyCustomer, api('changePassword'))
-
-
+router.post('/confirmation/:id/:token', api('verifyEmail'))
 
 
  export default router;

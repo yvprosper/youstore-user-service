@@ -1,45 +1,18 @@
-// import express from "express";
-// const app = express();
-// const {container}= require ("../../container")
-
-
-// import dotenv from "dotenv";
-// dotenv.config();
-// import config from "config";
-// import connectDb from "../../infra/database/mongoose";
-// import logger from "./utils/logger";
-// import { scopePerRequest, loadControllers } from "awilix-express";
-
-// import router from "./router/routes"
-
-
-// const port = config.get<number>("port");
-
-
-// app.use(router())
-
-// app.use(express.json());
-//  app.use(scopePerRequest(container))
-//  app.use(loadControllers('../controllers/*.ts', { cwd: __dirname }))
-
-
-// app.listen(port, async () => {
-//     logger.info(`App is running at http://localhost:${port}`);
-//     await connectDb()
-// });
-
 import express from "express";
 import http from "http";
+import Config from "config"
+import log from "./utils/logger";
+import routes from "./router/routes";
 
 
 
 class Server {
-    config: any;
+    config: typeof Config;
     router: any;
-    logger: any;
+    logger: typeof log;
     express: any;
     
-    constructor({ config, router, logger }: any) {
+    constructor({ config, router, logger }: {config: typeof Config, router: any, logger: typeof log;}) {
         this.config = config;
         this.logger = logger;
         this.express = express();

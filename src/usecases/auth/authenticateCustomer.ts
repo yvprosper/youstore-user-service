@@ -1,11 +1,11 @@
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
-import CustomerRepository from "../../../infra/repository/customerRepository"
-import CustomerModel from "../../../infra/database/models/mongoose/customerModel"
-import log from "../../../interface/http/utils/logger"
-import { signInValidation } from "../../../interface/http/validations/customerValidations"
-import { CustomerDocument } from "../../../infra/database/models/mongoose/customerModel"
-import { Iauth } from "../../../interface/http/validations/customerValidations"
+import CustomerRepository from "../../infra/repository/customerRepository"
+import CustomerModel from "../../infra/database/models/mongoose/customerModel"
+import log from "../../interface/http/utils/logger"
+import { signInValidation } from "../../interface/http/validations/customerValidations"
+import { CustomerDocument } from "../../infra/database/models/mongoose/customerModel"
+import { Iauth } from "../../interface/http/validations/customerValidations"
 import Config from "config"
 
 
@@ -38,7 +38,12 @@ import Config from "config"
             if (!validPass) throw new Error('Your email or password is incorrect')
      
             //  generating jwt token
-            const token = await jwt.sign({_id: customer._id}, this.config.get('customerSecret'));
+            const token = await jwt.sign({
+                _id: customer._id, fullName: customer.fullName, 
+                avatar: customer.avatar, address: customer.address,
+                email: customer.email, phoneNo: customer.phoneNo,
+                isVerified: customer.isVerified
+            }, this.config.get('customerSecret'));
 
             return {token, customer}
     }

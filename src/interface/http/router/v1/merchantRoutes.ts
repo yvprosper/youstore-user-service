@@ -11,15 +11,13 @@ router
      .route("/")
      .post(api('create'))
      .get(api('getAll')) //admin route to be protected 
-
-
- router
-     .route("/")
-     .post(verifyMerchant, upload.single('avatar'), api('upload'))
      .put(verifyMerchant, api('update'))
      .delete(verifyMerchant, api('delete'))
 
- router.get("/:merchantId", api('get') ) //admin route to be protected
+     
+ router.get("/one",verifyMerchant, api('get') ) 
+ router.post('/upload',verifyMerchant, upload.single('avatar'), api('upload') )
+ router.post('/upload-banner',verifyMerchant, upload.single('banner'), api('uploadStoreBanner') )
 
  export default router;
 

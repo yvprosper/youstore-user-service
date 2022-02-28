@@ -14,7 +14,7 @@ router.use("/customers" , customerRoutes)
 
 router.use("/merchants" , merchantRoutes)
 
-router.use("/auth", authRouter)
+router.use("/auth/customer", authRouter)
 
 router.use("/auth/merchant", merchantAuth)
 

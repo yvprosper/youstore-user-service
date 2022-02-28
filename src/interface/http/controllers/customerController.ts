@@ -41,6 +41,7 @@ class CustomerController {
                 avatar: customer?.avatar,
                 phoneNo: customer?.phoneNo,
                 email: customer?.email,
+                isVerified: customer?.isVerified,
                 createdAt: customer?.createdAt,
                 updatedAt: customer?.updatedAt
             }
@@ -55,7 +56,7 @@ class CustomerController {
 
     async get(req: Request , res: Response) {
         try {
-            const {customerId} = req.params
+            const customerId = req.user._id
             const customer = await this.getCustomer.execute(customerId)
             if (!customer) return  res.status(400).json({success: false , msg: `Customer with this ID not found`})
             res.status(HTTP_STATUS.OK).json({success: true , msg:`Customer details successfully retrieved`, data:  customer})
@@ -89,6 +90,7 @@ class CustomerController {
                 avatar: customer.avatar,
                 phoneNo: customer.phoneNo,
                 email: customer.email,
+                isVerified: customer.isVerified,
                 createdAt: customer.createdAt,
                 updatedAt: customer.updatedAt
             }

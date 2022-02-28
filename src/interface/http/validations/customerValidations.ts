@@ -11,13 +11,18 @@ export interface IchangePassword {
   newPassword: string;
 }
 
+export interface IresetPassword {
+  confirmPassword: string;
+  newPassword: string;
+}
+
 
 // validation for creating a customer
 export const createCustomerSchema = (user: CustomerDocument) => {
   const schema = Joi.object({
   fullName: Joi.string().required(),
   address: Joi.string().required(),
-  phoneNo: Joi.string().required(),
+  phoneNo: Joi.string().length(11).required(),
   email: Joi.string().email().required(),
   password: Joi.string().required(),
 }).unknown();
@@ -42,3 +47,13 @@ export  const changePasswordValidation = (user: IchangePassword) => {
     }).unknown();
         return schema.validate(user);
     }
+
+export const resetPasswordValidation = (user: IresetPassword) => {
+      const schema = Joi.object({
+          newPassword: Joi.string().min(6).required() ,
+          confirmPassword: Joi.string().min(6).required() 
+      }).unknown();
+          return schema.validate(user);
+      }
+  
+

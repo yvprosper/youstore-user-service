@@ -8,6 +8,7 @@ export interface CustomerInput {
   address: string;
   email: string;
   password: string;
+  isVerified: boolean
 
 }
 
@@ -24,7 +25,7 @@ const customerSchema = new mongoose.Schema(
     },
     phoneNo: { 
         type: String, 
-        required: true 
+        required: true,
     },
     avatar: { 
         type: String
@@ -37,16 +38,20 @@ const customerSchema = new mongoose.Schema(
         type: String, 
         required: true 
     },
+    isVerified: { 
+      type: Boolean, 
+      default: false 
+    },
     password: { 
         type: String, 
-        required: true 
+        required: true,
     },
   },
   {
     timestamps: true,
   }
 );
-
+//mongoose.models = {}
 const CustomerModel = mongoose.model<CustomerDocument>("Customer", customerSchema);
-
+//mongoose.models = {}
 export default CustomerModel;

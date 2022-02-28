@@ -5,7 +5,7 @@ const cloudinary = require('../../infra/libs/cloudinary')
 const fs = require('fs')
 
 
-class UploadPhoto{
+class UploadBanner{
     merchantRepository: MerchantRepository
     logger: typeof log
     merchantModel: typeof MerchantModel
@@ -18,13 +18,12 @@ class UploadPhoto{
     async execute(payload: any, merchantId: String) {
         try {
             
-            const uploader = async (path: String) => await cloudinary.uploads(path , 'youstore-merchant-photos')
+            const uploader = async (path: String) => await cloudinary.uploads(path , 'youstore-store-banners')
             const url = []
             const file = payload
 
             const {path} = file
             const newPath = await uploader(path)
-
 
             url.push(newPath.url)
         
@@ -32,7 +31,7 @@ class UploadPhoto{
 
             const merchant = await MerchantModel.findById(merchantId)
 
-            merchant!.avatar = url.toString()
+            merchant!.storeBanner = url.toString()
 
             await merchant?.save()
 
@@ -44,4 +43,4 @@ class UploadPhoto{
     }
 }
 
-export default UploadPhoto
+export default UploadBanner

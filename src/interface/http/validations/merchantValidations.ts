@@ -12,7 +12,7 @@ export const createMerchantSchema = (user: MerchantDocument) => {
   address: Joi.string().required(),
   phoneNo: Joi.string().required(),
   email: Joi.string().email().required(),
-  password: Joi.string().required(),
+  password: Joi.string().min(6).required(),
 }).unknown();
         return schema.validate(user);
 }

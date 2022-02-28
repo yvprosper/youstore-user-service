@@ -1,10 +1,10 @@
 import bcrypt from "bcrypt"
-import MerchantRepository from "../../../infra/repository/merchantRepository"
-import MerchantModel from "../../../infra/database/models/mongoose/merchantModel"
-import log from "../../../interface/http/utils/logger"
-import { changePasswordValidation } from "../../../interface/http/validations/customerValidations"
-import { MerchantDocument } from "../../../infra/database/models/mongoose/merchantModel"
-import { IchangePassword } from "../../../interface/http/validations/customerValidations"
+import MerchantRepository from "../../infra/repository/merchantRepository"
+import MerchantModel from "../../infra/database/models/mongoose/merchantModel"
+import log from "../../interface/http/utils/logger"
+import { changePasswordValidation } from "../../interface/http/validations/customerValidations"
+import { MerchantDocument } from "../../infra/database/models/mongoose/merchantModel"
+import { IchangePassword } from "../../interface/http/validations/customerValidations"
 import Config from "config"
 
 

@@ -2,13 +2,17 @@ import mongoose from "mongoose";
 
 
 export interface MerchantInput {
-  fullName: string;
   storeName: string;
   phoneNo: string;
   avatar: string;
+  storeBanner: string
   address: string;
   myTransactions: mongoose.Schema.Types.ObjectId
   email: string;
+  bankName: string;
+  accountNo: string;
+  accountName: string
+  isVerified: boolean
   password: string;
 
 }
@@ -20,20 +24,31 @@ export interface MerchantDocument extends MerchantInput, mongoose.Document {
 
 const merchantSchema = new mongoose.Schema(
   {
-   fullName: { 
-       type: String,
-       required: true
-    },
     storeName: { 
         type: String,
         required: true
      },
+     bankName: { 
+      type: String,
+      required: true
+   },
+   accountNo: { 
+    type: String,
+    required: true
+  },
+   accountName: { 
+    type: String,
+    required: true
+  },
     phoneNo: { 
         type: String, 
-        required: true 
+        required: true,
     },
     avatar: { 
         type: String
+    },
+    storeBanner: { 
+      type: String
     },
     address: { 
         type: String, 
@@ -46,9 +61,13 @@ const merchantSchema = new mongoose.Schema(
         type: String, 
         required: true 
     },
+    isVerified: { 
+      type: Boolean, 
+      default: false 
+    },
     password: { 
         type: String, 
-        required: true 
+        required: true,
     },
   },
   {

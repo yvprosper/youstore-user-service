@@ -12,16 +12,12 @@
       .route("/")
       .post(api('create'))
       .get(api('getAll')) //admin route
-      
-
-
- router
-      .route("/")
-      .post(verifyCustomer, upload.single('avatar'), api('upload'))
       .put(verifyCustomer, api('update'))
       .delete(verifyCustomer, api('delete'))
+      
 
- router.get("/:customerId",api('get')) //admin route
+ router.get("/one",verifyCustomer, api('get')) 
+ router.post('/upload', verifyCustomer, upload.single('avatar'), api('upload'))
 
 
 

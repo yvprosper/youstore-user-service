@@ -1,17 +1,27 @@
 import { Request, Response } from "express";
-import AuthenticateMerchant from "../../../usecases/auth/merchants/authenticateMerchant";
+import AuthenticateMerchant from "../../../usecases/auth/authenticateMerchant";
 import { MerchantDocument } from "../../../infra/database/models/mongoose/merchantModel";
-import ChangeMerchantPassword from "../../../usecases/auth/merchants/changePassword";
+import ChangeMerchantPassword from "../../../usecases/auth/changeMerchantPassword";
+import ResetMerchantPassword from "../../../usecases/auth/resetMerchantPassword";
+import VerifyMerchantResetToken from "../../../usecases/auth/verifyMerchantResetToken";
+import VerifyMerchantEmailToken from "../../../usecases/auth/verifyMerchantEmailToken";
 
 
 
 class MerchantAuth {
     authenticateMerchant: AuthenticateMerchant
     changeMerchantPassword: ChangeMerchantPassword
-    constructor({authenticateMerchant, changeMerchantPassword}: 
-        {authenticateMerchant: AuthenticateMerchant, changeMerchantPassword: ChangeMerchantPassword}) {
+    resetMerchantPassword: ResetMerchantPassword
+    verifyMerchantResetToken: VerifyMerchantResetToken
+    verifyMerchantEmailToken: VerifyMerchantEmailToken
+    constructor({authenticateMerchant, changeMerchantPassword, resetMerchantPassword , verifyMerchantResetToken , verifyMerchantEmailToken}: 
+        {authenticateMerchant: AuthenticateMerchant, changeMerchantPassword: ChangeMerchantPassword, resetMerchantPassword: ResetMerchantPassword,
+         verifyMerchantResetToken: VerifyMerchantResetToken, verifyMerchantEmailToken: VerifyMerchantEmailToken}) {
         this.authenticateMerchant = authenticateMerchant
         this.changeMerchantPassword = changeMerchantPassword
+        this.resetMerchantPassword =resetMerchantPassword
+        this.verifyMerchantResetToken = verifyMerchantResetToken
+        this.verifyMerchantEmailToken = verifyMerchantEmailToken
     }
 
     async authenticate(req: Request , res: Response) {
@@ -19,7 +29,6 @@ class MerchantAuth {
         const payload = req.body
         const {token, merchant}: {token: string , merchant: MerchantDocument} = await this.authenticateMerchant.execute(payload)
 
-        //const {password, ...response} = customer
         const response = {
             _id: merchant?._id,
             fullName: merchant?.fullName,
@@ -27,6 +36,7 @@ class MerchantAuth {
             avatar: merchant?.avatar,
             phoneNo: merchant?.phoneNo,
             storeName: merchant?.storeName,
+            isVerified: merchant?.isVerified,
             email: merchant?.email,
             createdAt: merchant?.createdAt,
             updatedAt: merchant?.updatedAt
@@ -59,6 +69,56 @@ class MerchantAuth {
             throw error
         }
     }
+
+    async reset(req: Request , res: Response) {
+        try {
+            const {email} = req.body
+            const link = await this.resetMerchantPassword.execute(email)
+
+            res.status(200)
+            .json({success: true, msg: `The reset link has been sent to your email`, data: link})
+
+        } catch (error) {
+            if (error instanceof Error ) {
+                throw new Error(`${error.message}`)
+            }
+            throw error
+        }
+    }
+
+    async verify(req: Request , res: Response) {
+        try {
+            const body = req.body
+            const merchantId = req.params.id
+            const token = req.params.token
+
+            await this.verifyMerchantResetToken.execute(merchantId,token,body)
+            res.status(200)
+            .json({success: true, msg: `Password Reset Successful`})
+        } catch (error) {
+            if (error instanceof Error ) {
+                throw new Error(`${error.message}`)
+            }
+            throw error
+        }
+    }
+
+    async verifyEmail(req: Request , res: Response) {
+        try {
+            const merchantId = req.params.id
+            const token = req.params.token
+
+            await this.verifyMerchantEmailToken.execute(merchantId,token)
+            res.status(200)
+            .json({success: true, msg: `Email Verification Successful`})
+        } catch (error) {
+            if (error instanceof Error ) {
+                throw new Error(`${error.message}`)
+            }
+            throw error
+        }
+    }
+
 
 }
 
