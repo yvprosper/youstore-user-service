@@ -31,17 +31,18 @@ class MerchantAuth {
 
         const response = {
             _id: merchant._id,
-                storeName: merchant.storeName,
-                address: merchant.address,
-                avatar: merchant.avatar,
-                phoneNo: merchant.phoneNo,
-                email: merchant.email,
-                bankName: merchant.bankName,
-                accountName: merchant.accountName,
-                accountNo: merchant.accountNo,
-                isVerified: merchant.isVerified,
-                createdAt: merchant.createdAt,
-                updatedAt: merchant.updatedAt
+            storeName: merchant.storeName,
+            address: merchant.address,
+            avatar: merchant.avatar,
+            storeBanner: merchant.storeBanner,
+            phoneNo: merchant.phoneNo,
+            email: merchant.email,
+            bankName: merchant.bankName,
+            accountName: merchant.accountName,
+            accountNo: merchant.accountNo,
+            isVerified: merchant.isVerified,
+            createdAt: merchant.createdAt,
+            updatedAt: merchant.updatedAt
         }
 
         res.status(200)

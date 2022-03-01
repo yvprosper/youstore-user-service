@@ -32,7 +32,7 @@ import Config from "config"
                 const token = jwt.sign({email: saveMerchant.email}, `${secret}`, {expiresIn: '1d'})
                   
                 // creating an email verification link
-                const link = `http://localhost:5000/v1/auth/merchant/confirmation/${saveMerchant._id}/${token}`
+                const link = `https://youstore-users.herokuapp.com/v1/auth/merchant/confirmation/${saveMerchant._id}/${token}`
                 
 
                 console.log(link)

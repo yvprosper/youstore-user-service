@@ -99,6 +99,7 @@ class MerchantController {
                 storeName: merchant.storeName,
                 address: merchant.address,
                 avatar: merchant.avatar,
+                storeBanner: merchant.storeBanner,
                 phoneNo: merchant.phoneNo,
                 email: merchant.email,
                 bankName: merchant.bankName,
@@ -132,8 +133,23 @@ class MerchantController {
             const payload = req.file
             const merchant = await this.uploadPhoto.execute(payload, merchantId)
             if (!merchant) return  res.status(400).json({success: false , msg: `Merchant with this ID not found`})
+            const response = {
+                _id: merchant._id,
+                storeName: merchant.storeName,
+                address: merchant.address,
+                avatar: merchant.avatar,
+                storeBanner: merchant.storeBanner,
+                phoneNo: merchant.phoneNo,
+                email: merchant.email,
+                bankName: merchant.bankName,
+                accountName: merchant.accountName,
+                accountNo: merchant.accountNo,
+                isVerified: merchant.isVerified,
+                createdAt: merchant.createdAt,
+                updatedAt: merchant.updatedAt
+            }
 
-            res.status(200).json({success: true , msg:`Photo successfully uploaded`, data:  merchant})
+            res.status(200).json({success: true , msg:`Photo successfully uploaded`, data:  response})
         }catch (error){
             res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({success: false , data: error})
         }
@@ -145,8 +161,22 @@ class MerchantController {
             const payload = req.file
             const merchant = await this.uploadBanner.execute(payload, merchantId)
             if (!merchant) return  res.status(400).json({success: false , msg: `Merchant with this ID not found`})
-
-            res.status(200).json({success: true , msg:`Photo successfully uploaded`, data:  merchant})
+            const response = {
+                _id: merchant._id,
+                storeName: merchant.storeName,
+                address: merchant.address,
+                avatar: merchant.avatar,
+                storeBanner: merchant.storeBanner,
+                phoneNo: merchant.phoneNo,
+                email: merchant.email,
+                bankName: merchant.bankName,
+                accountName: merchant.accountName,
+                accountNo: merchant.accountNo,
+                isVerified: merchant.isVerified,
+                createdAt: merchant.createdAt,
+                updatedAt: merchant.updatedAt
+            }
+            res.status(200).json({success: true , msg:`Photo successfully uploaded`, data:  response})
         }catch (error){
             res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({success: false , data: error})
         }

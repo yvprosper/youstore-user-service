@@ -33,7 +33,7 @@ import Config from "config"
                 const token = jwt.sign({email: saveCustomer.email}, `${secret}`, {expiresIn: '1d'})
                   
                 // creating an email verification link
-                const link = `http://localhost:5000/v1/auth/confirmation/${saveCustomer._id}/${token}`
+                const link = `https://youstore-users.herokuapp.com/v1/auth/customer/confirmation/${saveCustomer._id}/${token}`
                 
 
                 console.log(link)

@@ -36,7 +36,7 @@ import Messenger from "../../infra/libs/rabbitmq";
             const token = jwt.sign(payload, secret, {expiresIn: '10m'})
                   
             // creating a reset link
-            const link = `http://localhost:5000/v1/auth/merchant/reset-password/${merchant._id}/${token}`
+            const link = `https://youstore-users.herokuapp.com/v1/auth/merchant/reset-password/${merchant._id}/${token}`
 
             this.messenger.sendToQueue(`reset_merchant_password`, {merchant, link})
 
