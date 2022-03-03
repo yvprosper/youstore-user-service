@@ -31,7 +31,8 @@ class CustomerAuth {
         //const {password, ...response} = customer
         const response = {
             _id: customer?._id,
-            fullName: customer?.fullName,
+            firstName: customer?.firstName,
+            lastName: customer?.lastName,
             address: customer?.address,
             avatar: customer?.avatar,
             phoneNo: customer?.phoneNo,

@@ -36,7 +36,8 @@ class CustomerController {
             const customer = await this.createCustomer.execute(payload)
             const response = {
                 _id: customer?._id,
-                fullName: customer?.fullName,
+                firstName: customer?.firstName,
+                lastName: customer?.lastName,
                 address: customer?.address,
                 avatar: customer?.avatar,
                 phoneNo: customer?.phoneNo,
@@ -85,7 +86,8 @@ class CustomerController {
             if (!customer) return  res.status(400).json({success: false , msg: `Customer with this ID not found`})
             const response = {
                 _id: customer._id,
-                fullName: customer.fullName,
+                firstName: customer.firstName,
+                lastName: customer.lastName,
                 address: customer.address,
                 avatar: customer.avatar,
                 phoneNo: customer.phoneNo,

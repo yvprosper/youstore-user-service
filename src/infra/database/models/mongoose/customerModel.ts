@@ -2,7 +2,8 @@ import mongoose from "mongoose";
 
 
 export interface CustomerInput {
-  fullName: string;
+  firstName: string;
+  lastName: string;
   phoneNo: string;
   avatar: string;
   address: string;
@@ -19,10 +20,14 @@ export interface CustomerDocument extends CustomerInput, mongoose.Document {
 
 const customerSchema = new mongoose.Schema(
   {
-   fullName: { 
+   firstName: { 
        type: String,
        required: true
     },
+    lastName: { 
+      type: String,
+      required: true
+   },
     phoneNo: { 
         type: String, 
         required: true,

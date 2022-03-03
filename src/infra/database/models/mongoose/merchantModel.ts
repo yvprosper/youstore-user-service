@@ -30,15 +30,12 @@ const merchantSchema = new mongoose.Schema(
      },
      bankName: { 
       type: String,
-      required: true
    },
    accountNo: { 
     type: String,
-    required: true
   },
    accountName: { 
     type: String,
-    required: true
   },
     phoneNo: { 
         type: String, 

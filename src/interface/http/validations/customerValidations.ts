@@ -20,7 +20,8 @@ export interface IresetPassword {
 // validation for creating a customer
 export const createCustomerSchema = (user: CustomerDocument) => {
   const schema = Joi.object({
-  fullName: Joi.string().required(),
+  firstName: Joi.string().required(),
+  lastName: Joi.string().required(),
   address: Joi.string().required(),
   phoneNo: Joi.string().length(11).required(),
   email: Joi.string().email().required(),

@@ -9,7 +9,8 @@ export const createMerchantSchema = (user: MerchantDocument) => {
     const schema = Joi.object({
   storeName: Joi.string().required(),
   address: Joi.string().required(),
-  phoneNo: Joi.string().required(),
+  phoneNo: Joi.string().length(11).required(),
+  accountNo: Joi.string().length(10),
   email: Joi.string().email().required(),
   password: Joi.string().min(6).required(),
 }).unknown();

@@ -39,9 +39,13 @@ import Config from "config"
      
             //  generating jwt token
             const token = await jwt.sign({
-                _id: customer._id, fullName: customer.fullName, 
-                avatar: customer.avatar, address: customer.address,
-                email: customer.email, phoneNo: customer.phoneNo,
+                _id: customer._id, 
+                firstName: customer.firstName, 
+                lastName: customer.lastName, 
+                avatar: customer.avatar, 
+                address: customer.address,
+                email: customer.email,
+                phoneNo: customer.phoneNo,
                 isVerified: customer.isVerified
             }, this.config.get('customerSecret'));
 

@@ -22,10 +22,10 @@ import Config from "config"
 
     async create (payload: CustomerDocument) {
             try {
-                let {fullName, phoneNo, address, avatar, email , password} = payload
+                let {firstName, lastName, phoneNo, address, avatar, email , password} = payload
                 const hashedPassword= await bcrypt.hash(password , 12)
                 password = hashedPassword
-                const customer = await this.customerModel.create({fullName, phoneNo, address, avatar, email , password});
+                const customer = await this.customerModel.create({firstName, lastName, phoneNo, address, avatar, email , password});
                 const saveCustomer = await customer.save()
 
                 // creating an email verification token
