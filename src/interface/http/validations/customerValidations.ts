@@ -30,6 +30,16 @@ export const createCustomerSchema = (user: CustomerDocument) => {
         return schema.validate(user);
 }
 
+// validation for updating a customer record
+export const updateCustomerSchema = (user: CustomerDocument) => {
+  const schema = Joi.object({
+  firstName: Joi.string(),
+  lastName: Joi.string(),
+  address: Joi.string(),
+  phoneNo: Joi.string(),
+}).unknown();
+        return schema.validate(user);
+}
 
 export const signInValidation = (user: Iauth) => {
   const schema = Joi.object({
