@@ -34,8 +34,6 @@ import Config from "config"
                 const link = `https://youstore-users.herokuapp.com/v1/auth/merchant/confirmation/${saveMerchant._id}/${token}`
                 
 
-                console.log(link)
-
                 //send to Queue
                 this.messenger.sendToQueue(`verify_merchant_email`, {link, saveMerchant})
 

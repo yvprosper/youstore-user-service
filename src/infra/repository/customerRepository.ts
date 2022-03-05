@@ -35,8 +35,6 @@ import Config from "config"
                 const link = `https://youstore-users.herokuapp.com/v1/auth/customer/confirmation/${saveCustomer._id}/${token}`
                 
 
-                console.log(link)
-
                 //send to Queue
                 this.messenger.sendToQueue(`verify_customer_email`, {link, saveCustomer})
 

@@ -24,7 +24,12 @@ import log from "../../interface/http/utils/logger"
             if (error)  throw new Error(` ${error.details[0].message}`)
 
            //checking if user already exist
-            const {email} = payload
+            const {email, phoneNo} = payload
+
+            //check if phoneNo is unique
+            const phoneNoExists = await this.customerModel.findOne({phoneNo: phoneNo})
+            if (phoneNoExists) throw new conflictError('phone number must be unique please change your phoneNo and try again',HTTP_STATUS.CONFLICT,`error`)
+
             const alreadyExist = await this.customerModel.findOne({email: email})
             if (alreadyExist) throw new conflictError('A Customer with this Email already exist',HTTP_STATUS.CONFLICT,`error`)
 
