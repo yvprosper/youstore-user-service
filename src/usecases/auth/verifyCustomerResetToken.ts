@@ -24,6 +24,7 @@ import { resetPasswordValidation, IresetPassword } from "../../interface/http/va
     }
 
     async execute(customerId: string, token: string, body: IresetPassword) {
+        try {
         const {newPassword, confirmPassword} = body
             // Schema validation
             const {error} = resetPasswordValidation({confirmPassword, newPassword})
@@ -50,6 +51,11 @@ import { resetPasswordValidation, IresetPassword } from "../../interface/http/va
 
 
             return  customer
+
+        } catch (error) {
+            throw error
+        }
+            
         }
     }
 

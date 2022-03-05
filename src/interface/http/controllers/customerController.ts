@@ -8,7 +8,7 @@ import DeleteCustomer from "../../../usecases/customers/deleteCustomer";
 import CustomerRepository from "../../../infra/repository/customerRepository";
 import GetCustomers from "../../../usecases/customers/getCustomers";
 import UploadAvatar from "../../../usecases/customers/uploadAvatar";
-
+import { CustomerDocument } from "../../../infra/database/models/mongoose/customerModel";
 class CustomerController {
     createCustomer: CreateCustomer
     getCustomer: GetCustomer
@@ -49,6 +49,7 @@ class CustomerController {
             res.status(HTTP_STATUS.CREATED).json({success: true , msg:`Customer account successfully created`,  data: response})
         }catch (error){
             if (error instanceof Error ) {
+                res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})
                 throw new Error(`${error.message}`)
             } 
             throw error
@@ -59,10 +60,13 @@ class CustomerController {
         try {
             const customerId = req.user._id
             const customer = await this.getCustomer.execute(customerId)
-            if (!customer) return  res.status(400).json({success: false , msg: `Customer with this ID not found`})
             res.status(HTTP_STATUS.OK).json({success: true , msg:`Customer details successfully retrieved`, data:  customer})
         }catch (error){
-            res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({success: false , data: error})
+            if (error instanceof Error ) {
+                res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})
+                throw new Error(`${error.message}`)
+            } 
+            throw error
         }
     }
 
@@ -71,9 +75,13 @@ class CustomerController {
         try {
             const payload = {}
             const customers = await this.getCustomers.execute(payload)
-            res.status(200).json({success: true , msg:`Customers successfully retrieved`,  data: customers})
+            res.status(200).json({success: true , msg:`AllCustomer details successfully retrieved`, data:  customers})
         }catch (error){
-            res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({success: false , data: error})
+            if (error instanceof Error ) {
+                res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})
+                throw new Error(`${error.message}`)
+            } 
+            throw error
         }
     }
 
@@ -82,23 +90,27 @@ class CustomerController {
         try {
             const customerId = req.user._id
             const payload = req.body
-            const customer = await this.updateCustomer.execute(customerId, payload)
-            if (!customer) return  res.status(400).json({success: false , msg: `Customer with this ID not found`})
+            const customer: CustomerDocument | undefined = await this.updateCustomer.execute(customerId, payload)
+            
             const response = {
-                _id: customer._id,
-                firstName: customer.firstName,
-                lastName: customer.lastName,
-                address: customer.address,
-                avatar: customer.avatar,
-                phoneNo: customer.phoneNo,
-                email: customer.email,
-                isVerified: customer.isVerified,
-                createdAt: customer.createdAt,
-                updatedAt: customer.updatedAt
+                _id: customer!._id,
+                firstName: customer!.firstName,
+                lastName: customer!.lastName,
+                address: customer!.address,
+                avatar: customer!.avatar,
+                phoneNo: customer!.phoneNo,
+                email: customer!.email,
+                isVerified: customer!.isVerified,
+                createdAt: customer!.createdAt,
+                updatedAt: customer!.updatedAt
             }
             res.status(200).json({success: true , msg:`Customer details successfully updated`, data:  response})
         }catch (error){
-            res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({success: false , data: error})
+            if (error instanceof Error ) {
+                res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})
+                throw new Error(`${error.message}`)
+            } 
+            throw error
         }
     }
 
@@ -106,11 +118,14 @@ class CustomerController {
     async delete(req: Request , res: Response) {
         try {
             const customerId = req.user._id
-            const customer = await this.deleteCustomer.execute(customerId)
-            if (!customer) return  res.status(404).json({success: false , msg: `Customer with this ID not found`})
+            await this.deleteCustomer.execute(customerId)
             res.status(200).json({success: true , msg:`Customer details successfully removed from database`})
         }catch (error){
-            res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({success: false , data: error})
+            if (error instanceof Error ) {
+                res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})
+                throw new Error(`${error.message}`)
+            } 
+            throw error
         }
     }
 
@@ -119,11 +134,26 @@ class CustomerController {
             const customerId = req.user._id
             const payload = req.file
             const customer = await this.uploadAvatar.execute(payload, customerId)
-            if (!customer) return  res.status(400).json({success: false , msg: `Customer with this ID not found`})
 
-            res.status(200).json({success: true , msg:`Photo successfully uploaded`, data:  customer})
+            const response = {
+                _id: customer!._id,
+                firstName: customer!.firstName,
+                lastName: customer!.lastName,
+                address: customer!.address,
+                avatar: customer!.avatar,
+                phoneNo: customer!.phoneNo,
+                email: customer!.email,
+                isVerified: customer!.isVerified,
+                createdAt: customer!.createdAt,
+                updatedAt: customer!.updatedAt
+            }
+            res.status(200).json({success: true , msg:`Photo successfully uploaded`, data:  response})
         }catch (error){
-            res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({success: false , data: error})
+            if (error instanceof Error ) {
+                res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})
+                throw new Error(`${error.message}`)
+            } 
+            throw error
         }
     }
 

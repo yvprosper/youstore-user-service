@@ -5,6 +5,7 @@ import ChangeMerchantPassword from "../../../usecases/auth/changeMerchantPasswor
 import ResetMerchantPassword from "../../../usecases/auth/resetMerchantPassword";
 import VerifyMerchantResetToken from "../../../usecases/auth/verifyMerchantResetToken";
 import VerifyMerchantEmailToken from "../../../usecases/auth/verifyMerchantEmailToken";
+import HTTP_STATUS from "http-status-codes"
 
 
 
@@ -51,8 +52,9 @@ class MerchantAuth {
 
         } catch (error) {
             if (error instanceof Error ) {
+                res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})
                 throw new Error(`${error.message}`)
-            }
+            } 
             throw error
         }
     }
@@ -67,8 +69,9 @@ class MerchantAuth {
             .json({success: true, msg: `merchant password successfully changed`})
         } catch (error) {
             if (error instanceof Error ) {
+                res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})
                 throw new Error(`${error.message}`)
-            }
+            } 
             throw error
         }
     }
@@ -76,15 +79,16 @@ class MerchantAuth {
     async reset(req: Request , res: Response) {
         try {
             const {email} = req.body
-            const link = await this.resetMerchantPassword.execute(email)
+            await this.resetMerchantPassword.execute(email)
 
             res.status(200)
-            .json({success: true, msg: `The reset link has been sent to your email`, data: link})
+            .json({success: true, msg: `The reset link has been sent to your email`})
 
         } catch (error) {
             if (error instanceof Error ) {
+                res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})
                 throw new Error(`${error.message}`)
-            }
+            } 
             throw error
         }
     }
@@ -100,8 +104,9 @@ class MerchantAuth {
             .json({success: true, msg: `Password Reset Successful`})
         } catch (error) {
             if (error instanceof Error ) {
+                res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})
                 throw new Error(`${error.message}`)
-            }
+            } 
             throw error
         }
     }
@@ -116,8 +121,9 @@ class MerchantAuth {
             .json({success: true, msg: `Email Verification Successful`})
         } catch (error) {
             if (error instanceof Error ) {
+                res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})
                 throw new Error(`${error.message}`)
-            }
+            } 
             throw error
         }
     }

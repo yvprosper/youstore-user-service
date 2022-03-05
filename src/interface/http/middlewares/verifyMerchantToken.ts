@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken"
+import HTTP_STATUS from 'http-status-codes'
 import dotenv from "dotenv"
 dotenv.config()
 
@@ -8,7 +9,10 @@ dotenv.config()
 
 export const verifyMerchant = (req: Request , res: Response , next: NextFunction) =>  {
 const token = req.header("auth-token");
-if (!token) throw new Error(`Access Denied!`)
+if (!token) {
+    res.status(HTTP_STATUS.UNAUTHORIZED).json({success: false , msg:`Access Denied`})
+    throw new Error(`Access Denied!`)
+} 
 
 const secret = process.env.MERCHANT_JWT_SECRET
 
@@ -20,6 +24,7 @@ try {
  next()
 } catch (error) {
     if (error instanceof Error ) {
+        res.status(HTTP_STATUS.UNAUTHORIZED).json({success: false , msg:`${error.message}`})
         throw new Error(`${error.message}`)
     }
     throw error

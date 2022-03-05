@@ -1,5 +1,4 @@
 import bcrypt from "bcrypt"
-import NotFoundError from "../../interface/http/errors/notFound"
 import { MerchantDocument } from "../database/models/mongoose/merchantModel"
 import MerchantModel from "../database/models/mongoose/merchantModel"
 import log from "../../interface/http/utils/logger"
@@ -43,16 +42,17 @@ import Config from "config"
 
                 return saveMerchant
             } catch (error) {
-                this.logger.error(error);
+                throw error
             }
     }
 
     async get (merchantId: String) {
             try {
                 const merchant = await this.merchantModel.findById(merchantId, {password: 0})
+                if(!merchant) throw new Error('Merchant with this ID does not exist')
                 return merchant
             } catch (error) {
-                this.logger.error(error);
+                throw error
                 
             }
     }
@@ -63,7 +63,7 @@ import Config from "config"
             const merchants = await this.merchantModel.find(payload, {password: 0})
             return merchants
         } catch (error) {
-            this.logger.error(error);
+            throw error
             
         }
     }
@@ -74,9 +74,11 @@ import Config from "config"
             const merchant = await this.merchantModel.findOneAndUpdate({_id: merchantId}, payload, {
                 new: true
             } )
+
+            if(!merchant) throw new Error('Merchant with this ID does not exist')
             return merchant
         } catch (error) {
-            this.logger.error(error);
+            throw error
         }
     }
 
@@ -84,12 +86,14 @@ import Config from "config"
     async delete (merchantId: String) {
             try {
                 const merchant = await this.merchantModel.findOneAndDelete({_id: merchantId})
-                if(!merchant) {
-                    throw new NotFoundError('Merchant with this ID does not exist' , 404, `error`)
-                }
+                if(!merchant) throw new Error('Merchant with this ID does not exist')
+                
+
+                //send to Queue
+                this.messenger.sendToQueue(`merchant_deleted`, merchant)
                 return merchant
             } catch (error) {
-                this.logger.error(error);
+                throw error
                 
             }
     }

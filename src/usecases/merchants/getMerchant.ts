@@ -15,7 +15,7 @@ class GetMerchant{
             const merchant = await this.merchantRepository.get(merchantId)
             return merchant
         } catch (error) {
-            this.logger.error(error)
+            throw error
         }
     }
 }

@@ -15,7 +15,7 @@ class DeleteMerchant{
             const merchant = await this.merchantRepository.delete(merchantId)
             return merchant
         } catch (error) {
-            this.logger.error(error)
+            throw error
         }
     }
 }

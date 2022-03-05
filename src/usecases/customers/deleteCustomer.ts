@@ -15,7 +15,7 @@ class DeleteCustomer{
             const customer = await this.customerRepository.delete(customerId)
             return customer
         } catch (error) {
-            this.logger.error(error)
+            throw error
         }
     }
 }

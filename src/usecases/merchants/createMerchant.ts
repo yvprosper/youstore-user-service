@@ -34,7 +34,7 @@ import log from "../../interface/http/utils/logger"
             return merchant
           
         } catch (error) {
-            //this.logger.error(error)
+            
             throw error
         }
     }

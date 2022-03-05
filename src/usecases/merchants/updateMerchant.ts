@@ -13,10 +13,12 @@ class UpdateMerchant{
 
     async execute(merchantId: String, payload: MerchantDocument) {
         try {
+            const {password} = payload
+            if (password) throw new Error (`you cannot change password with this route`)
             const merchant = await this.merchantRepository.update(merchantId, payload)
             return merchant
         } catch (error) {
-            this.logger.error(error)
+            throw error
         }
     }
 }

@@ -22,7 +22,7 @@ import Messenger from "../../infra/libs/rabbitmq";
     }
 
     async execute(email: String) {
-
+        try {
             //checking if customer is registered 
             const customer: CustomerDocument | null = await this.customerModel.findOne({email: email})
             if (!customer) throw new Error('Customer with this EMAIL not found')
@@ -42,6 +42,11 @@ import Messenger from "../../infra/libs/rabbitmq";
             this.messenger.sendToQueue(`reset_customer_password`, {customer, link})
 
             return  link
+
+        } catch (error) {
+            throw error
+        }
+
         }
     }
 

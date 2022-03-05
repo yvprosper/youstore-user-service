@@ -15,7 +15,7 @@ class GetCustomers{
            const customers =  await this.customerRepository.getAll(payload)
            return customers
         } catch (error) {
-            this.logger.error(error)
+            throw error
         }
     }
 }

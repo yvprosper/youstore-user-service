@@ -22,7 +22,7 @@ import Messenger from "../../infra/libs/rabbitmq";
     }
 
     async execute(email: String) {
-
+        try {
             //checking if merchant is registered 
             const merchant: MerchantDocument | null = await this.merchantModel.findOne({email: email})
             if (!merchant) throw new Error('Merchant with this EMAIL not found')
@@ -41,7 +41,12 @@ import Messenger from "../../infra/libs/rabbitmq";
             this.messenger.sendToQueue(`reset_merchant_password`, {merchant, link})
 
             return  link
+
+        } catch (error) {
+            throw error
         }
+
     }
+}
 
 export default ResetMerchantPassword

@@ -20,6 +20,8 @@ import jwt from "jsonwebtoken"
     }
 
     async execute(customerId: string, token: string) {
+
+        try{
             //checking if customer is registered 
             const customer: CustomerDocument | null = await this.customerModel.findOne({_id: customerId})
             if (!customer) throw new Error('Customer with this ID not found')
@@ -34,7 +36,12 @@ import jwt from "jsonwebtoken"
             await customer.save()
 
             return  customer
+
+        } catch (error) {
+            throw error
         }
+
     }
+}
 
 export default VerifyCustomerEmailToken

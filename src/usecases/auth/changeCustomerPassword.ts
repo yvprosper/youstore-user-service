@@ -22,13 +22,13 @@ import Config from "config"
     }
 
     async execute(customerId: String, payload: IchangePassword) {
-
+        try {
             const {oldPassword, newPassword} = payload
 
             // Schema validation
             const {error} = changePasswordValidation({oldPassword, newPassword})
             if (error)  throw new Error(` ${error.details[0].message}`)
-
+        
             //checking if customer is registered
             const customer: CustomerDocument | null = await this.customerModel.findOne({_id: customerId})
             if (!customer) throw new Error('Customer with this ID not found')
@@ -43,6 +43,10 @@ import Config from "config"
             await customer.save()
 
             return  customer
+        } catch (error) {
+            throw error
+        }
+        
         }
     }
 

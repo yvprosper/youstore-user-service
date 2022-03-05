@@ -15,9 +15,9 @@
       .put(verifyCustomer, api('update'))
       .delete(verifyCustomer, api('delete'))
       
-
- router.get("/one",verifyCustomer, api('get')) 
  router.post('/upload', verifyCustomer, upload.single('avatar'), api('upload'))
+ router.get("/one",verifyCustomer, api('get')) 
+ 
 
 
 

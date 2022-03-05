@@ -13,10 +13,12 @@ class UpdateCustomer{
 
     async execute(customerId: String, payload: CustomerDocument) {
         try {
+            const {password} = payload
+            if (password) throw new Error (`you cannot change password with this route`)
             const customer = await this.customerRepository.update(customerId, payload)
             return customer
         } catch (error) {
-            this.logger.error(error)
+            throw error
         }
     }
 }

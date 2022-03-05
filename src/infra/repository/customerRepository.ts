@@ -1,5 +1,4 @@
 import bcrypt from "bcrypt"
-import NotFoundError from "../../interface/http/errors/notFound"
 import { CustomerDocument } from "../database/models/mongoose/customerModel"
 import CustomerModel from "../database/models/mongoose/customerModel"
 import log from "../../interface/http/utils/logger"
@@ -44,16 +43,17 @@ import Config from "config"
                 return saveCustomer
                 
             } catch (error) {
-                this.logger.error(error);
+               throw error 
             }
     }
 
     async get (customerId: String) {
             try {
                 const customer = await this.customerModel.findById(customerId, {password: 0})
+                if(!customer) throw new Error('Customer with this ID does not exist')
                 return customer
             } catch (error) {
-                this.logger.error(error);
+                throw error
                 
             }
     }
@@ -64,7 +64,7 @@ import Config from "config"
             const customers = await this.customerModel.find(payload, {password: 0})
             return customers
         } catch (error) {
-            this.logger.error(error);
+           throw error
             
         }
     }
@@ -75,9 +75,12 @@ import Config from "config"
             const customer = await this.customerModel.findOneAndUpdate({_id: customerId}, payload, {
                 new: true
             } )
+
+            if(!customer) throw new Error('Customer with this ID does not exist')
+
             return customer
         } catch (error) {
-            this.logger.error(error);
+            throw error
         }
     }
 
@@ -85,12 +88,14 @@ import Config from "config"
     async delete (customerId: String) {
             try {
                 const customer = await this.customerModel.findOneAndDelete({_id: customerId})
-                if(!customer) {
-                    throw new NotFoundError('Customer with this ID does not exist' , 404, `error`)
-                }
+                if(!customer) throw new Error('Customer with this ID does not exist')
+                
+
+                //send to Queue
+                this.messenger.sendToQueue(`customer_deleted`, customer)
                 return customer
             } catch (error) {
-                this.logger.error(error);
+                throw error
                 
             }
     }

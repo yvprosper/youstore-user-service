@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import AuthenticateCustomer from "../../../usecases/auth/authenticateCustomer";
+import HTTP_STATUS from "http-status-codes"
 import { CustomerDocument } from "../../../infra/database/models/mongoose/customerModel";
 import ChangeCustomerPassword from "../../../usecases/auth/changeCustomerPassword";
 import ResetCustomerPassword from "../../../usecases/auth/resetCustomerPassword";
@@ -48,8 +49,9 @@ class CustomerAuth {
 
         } catch (error) {
             if (error instanceof Error ) {
+                res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})
                 throw new Error(`${error.message}`)
-            }
+            } 
             throw error
         }
     }
@@ -64,8 +66,9 @@ class CustomerAuth {
             .json({success: true, msg: `customer password successfully changed`})
         } catch (error) {
             if (error instanceof Error ) {
+                res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})
                 throw new Error(`${error.message}`)
-            }
+            } 
             throw error
         }
     }
@@ -73,15 +76,16 @@ class CustomerAuth {
     async reset(req: Request , res: Response) {
         try {
             const {email} = req.body
-            const link = await this.resetCustomerPassword.execute(email)
+             await this.resetCustomerPassword.execute(email)
 
             res.status(200)
-            .json({success: true, msg: `The reset link has been sent to your email`, data: link})
+            .json({success: true, msg: `The reset link has been sent to your email`})
 
         } catch (error) {
             if (error instanceof Error ) {
+                res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})
                 throw new Error(`${error.message}`)
-            }
+            } 
             throw error
         }
     }
@@ -97,8 +101,9 @@ class CustomerAuth {
             .json({success: true, msg: `Password Reset Successful`})
         } catch (error) {
             if (error instanceof Error ) {
+                res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})
                 throw new Error(`${error.message}`)
-            }
+            } 
             throw error
         }
     }
@@ -113,8 +118,9 @@ class CustomerAuth {
             .json({success: true, msg: `Email Verification Successful`})
         } catch (error) {
             if (error instanceof Error ) {
+                res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})
                 throw new Error(`${error.message}`)
-            }
+            } 
             throw error
         }
     }

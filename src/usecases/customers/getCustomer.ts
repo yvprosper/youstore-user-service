@@ -15,7 +15,7 @@ class GetCustomer{
             const customer = await this.customerRepository.get(customerId)
             return customer
         } catch (error) {
-            this.logger.error(error)
+            throw error
         }
     }
 }

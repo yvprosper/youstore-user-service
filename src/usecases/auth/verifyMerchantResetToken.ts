@@ -24,7 +24,10 @@ import { resetPasswordValidation, IresetPassword } from "../../interface/http/va
     }
 
     async execute(merchantId: string, token: string, body: IresetPassword) {
-        const {newPassword, confirmPassword} = body
+
+        try {
+
+            const {newPassword, confirmPassword} = body
             // Schema validation
             const {error} = resetPasswordValidation({confirmPassword, newPassword})
             if (error)  throw new Error(` ${error.details[0].message}`) 
@@ -50,6 +53,11 @@ import { resetPasswordValidation, IresetPassword } from "../../interface/http/va
 
 
             return merchant
+
+        } catch (error) {
+            throw error
+        }
+        
         }
     }
 

@@ -23,7 +23,7 @@ import Config from "config"
     }
 
     async execute({email, password}: Iauth) {
-
+        try {
             // Schema validation
             const {error} = signInValidation({email, password})
             if (error)  throw new Error(` ${error.details[0].message}`)
@@ -50,6 +50,9 @@ import Config from "config"
             }, this.config.get('customerSecret'));
 
             return {token, customer}
+        } catch (error) {
+            throw error
+        }
     }
 }
 

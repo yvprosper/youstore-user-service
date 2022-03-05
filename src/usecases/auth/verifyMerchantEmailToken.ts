@@ -19,6 +19,8 @@ import jwt from "jsonwebtoken"
     }
 
     async execute(merchantId: string, token: string) {
+
+            try {
             //checking if merchant is registered 
             const merchant: MerchantDocument | null = await this.merchantModel.findOne({_id: merchantId})
             if (!merchant) throw new Error('Merchant with this EMAIL not found')
@@ -33,6 +35,11 @@ import jwt from "jsonwebtoken"
             await merchant.save()
 
             return  merchant
+
+        } catch (error) {
+            throw error
+        }
+        
         }
     }
 
