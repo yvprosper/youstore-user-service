@@ -8,11 +8,13 @@ dotenv.config()
 
 
 export const verifyCustomer = (req: Request , res: Response , next: NextFunction) =>  {
-const token = req.header("auth-token");
-if (!token){
+const authHeader = req.headers.authorization
+if (!authHeader || !authHeader.startsWith('Bearer ')){
     res.status(HTTP_STATUS.UNAUTHORIZED).json({success: false , msg:`Access Denied`})
     throw new Error(`Access Denied!`)
 } 
+
+const token = authHeader.split(' ')[1]
 const secret = process.env.CUSTOMER_JWT_SECRET
 
 try {

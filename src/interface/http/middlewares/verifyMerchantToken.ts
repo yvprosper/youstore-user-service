@@ -8,13 +8,16 @@ dotenv.config()
 
 
 export const verifyMerchant = (req: Request , res: Response , next: NextFunction) =>  {
-const token = req.header("auth-token");
-if (!token) {
-    res.status(HTTP_STATUS.UNAUTHORIZED).json({success: false , msg:`Access Denied`})
-    throw new Error(`Access Denied!`)
-} 
-
-const secret = process.env.MERCHANT_JWT_SECRET
+    const authHeader = req.headers.authorization
+    if (!authHeader || !authHeader.startsWith('Bearer ')){
+        res.status(HTTP_STATUS.UNAUTHORIZED).json({success: false , msg:`Access Denied`})
+        throw new Error(`Access Denied!`)
+    } 
+    
+    const token = authHeader.split(' ')[1]
+  
+    
+    const secret = process.env.MERCHANT_JWT_SECRET
 
 try {
  // verify token and save customer Id to the verified variable
