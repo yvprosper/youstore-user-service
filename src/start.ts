@@ -1,7 +1,11 @@
 import Application from "./usecases/application";
 import container from "./container";
+import cors from 'cors'
+
 
 const app = new Application(container.cradle);
+
+app.use(cors)
 
 app.shutdown = () => {
     // clean up your resources and exit

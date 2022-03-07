@@ -3,6 +3,7 @@ import database from "../infra/database/mongoose"
 import log from "../interface/http/utils/logger";
 import Config from "config"
 import Messenger from "../infra/libs/rabbitmq";
+
 class Application {
     restServer: restServer;
     database: database;
@@ -10,6 +11,7 @@ class Application {
     config: typeof Config;
     messenger: Messenger;
     shutdown: any
+    use: any
 
 
     constructor({ restServer, database, logger, config, messenger}: {
