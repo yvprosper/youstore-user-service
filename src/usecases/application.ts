@@ -11,7 +11,6 @@ class Application {
     config: typeof Config;
     messenger: Messenger;
     shutdown: any
-    use: any
 
 
     constructor({ restServer, database, logger, config, messenger}: {
