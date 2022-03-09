@@ -20,12 +20,13 @@ class Server {
         this.express.use(router);
         this.express.use(express.json())
         this.express.app = http.createServer(this.express);
-        this.express.app.use(cors)
+        
        
       }
     
       start() {
         return new Promise((resolve) => {
+          this.express.app.use(cors)
           const server = this.express.app.listen(this.config.get("httpPort"), () => {
             const { port } = server.address();
             this.logger.info(`[pid ${process.pid}] REST server Listening on port ${port}`);
