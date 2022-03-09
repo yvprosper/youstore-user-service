@@ -18,6 +18,7 @@ class Server {
         this.express = express();
         this.express.disable("x-powered-by");
         this.express.use(router);
+        this.express.use(cors())
         this.express.use(express.json())
         this.express.app = http.createServer(this.express);
         
@@ -26,8 +27,6 @@ class Server {
     
       start() {
         return new Promise((resolve) => {
-          const app = this.express
-          app.use(cors())
           const server = this.express.app.listen(this.config.get("httpPort"), () => {
             const { port } = server.address();
             this.logger.info(`[pid ${process.pid}] REST server Listening on port ${port}`);
