@@ -30,7 +30,7 @@ class MerchantAuth {
         const payload = req.body
         const {token, merchant}: {token: string , merchant: MerchantDocument} = await this.authenticateMerchant.execute(payload)
 
-        const response = {
+        const user = {
             _id: merchant._id,
             storeName: merchant.storeName,
             address: merchant.address,
@@ -48,7 +48,7 @@ class MerchantAuth {
 
         res.status(200)
         .header('auth-token', token)
-        .json({success: true, msg: `merchant successfully logged in`, data: {token , response} })
+        .json({success: true, msg: `merchant successfully logged in`, data: {token , user} })
 
         } catch (error) {
             if (error instanceof Error ) {

@@ -42,7 +42,7 @@ class MerchantController {
 
             const payload = req.body
             const merchant = await this.createMerchant.execute(payload)
-            const response = {
+            const user = {
                 _id: merchant?._id,
                 storeName: merchant?.storeName,
                 address: merchant?.address,
@@ -56,7 +56,7 @@ class MerchantController {
                 createdAt: merchant?.createdAt,
                 updatedAt: merchant?.updatedAt
             }
-            res.status(HTTP_STATUS.CREATED).json({success: true , msg:`Merchant account successfully created`,  data: response})
+            res.status(HTTP_STATUS.CREATED).json({success: true , msg:`Merchant account successfully created`,  data: user})
         }catch (error){
             if (error instanceof Error ) {
                 res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})
@@ -101,7 +101,7 @@ class MerchantController {
             const merchantId = req.user._id
             const payload = req.body
             const merchant = await this.updateMerchant.execute(merchantId, payload)
-            const response = {
+            const user = {
                 _id: merchant!._id,
                 storeName: merchant!.storeName,
                 address: merchant!.address,
@@ -116,7 +116,7 @@ class MerchantController {
                 createdAt: merchant!.createdAt,
                 updatedAt: merchant!.updatedAt
             }
-            res.status(200).json({success: true , msg:`Merchant details successfully updated`, data:  response})
+            res.status(200).json({success: true , msg:`Merchant details successfully updated`, data:  user})
         }catch (error){
             if (error instanceof Error ) {
                 res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})
@@ -146,7 +146,7 @@ class MerchantController {
             const merchantId = req.user._id
             const payload = req.file
             const merchant = await this.uploadPhoto.execute(payload, merchantId)
-            const response = {
+            const user = {
                 _id: merchant!._id,
                 storeName: merchant!.storeName,
                 address: merchant!.address,
@@ -162,7 +162,7 @@ class MerchantController {
                 updatedAt: merchant!.updatedAt
             }
 
-            res.status(200).json({success: true , msg:`Photo successfully uploaded`, data:  response})
+            res.status(200).json({success: true , msg:`Photo successfully uploaded`, data:  user})
         }catch (error){
             if (error instanceof Error ) {
                 res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})
@@ -177,7 +177,7 @@ class MerchantController {
             const merchantId = req.user._id
             const payload = req.file
             const merchant = await this.uploadBanner.execute(payload, merchantId)
-            const response = {
+            const user = {
                 _id: merchant!._id,
                 storeName: merchant!.storeName,
                 address: merchant!.address,
@@ -192,7 +192,7 @@ class MerchantController {
                 createdAt: merchant!.createdAt,
                 updatedAt: merchant!.updatedAt
             }
-            res.status(200).json({success: true , msg:`Photo successfully uploaded`, data:  response})
+            res.status(200).json({success: true , msg:`Photo successfully uploaded`, data:  user})
         }catch (error){
             if (error instanceof Error ) {
                 res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})

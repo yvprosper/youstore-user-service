@@ -34,7 +34,7 @@ class CustomerController {
         try {
             const payload = req.body
             const customer = await this.createCustomer.execute(payload)
-            const response = {
+            const user = {
                 _id: customer?._id,
                 firstName: customer?.firstName,
                 lastName: customer?.lastName,
@@ -46,7 +46,7 @@ class CustomerController {
                 createdAt: customer?.createdAt,
                 updatedAt: customer?.updatedAt
             }
-            res.status(HTTP_STATUS.CREATED).json({success: true , msg:`Customer account successfully created`,  data: response})
+            res.status(HTTP_STATUS.CREATED).json({success: true , msg:`Customer account successfully created`,  data: user})
         }catch (error){
             if (error instanceof Error ) {
                 res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})
@@ -92,7 +92,7 @@ class CustomerController {
             const payload = req.body
             const customer: CustomerDocument | undefined = await this.updateCustomer.execute(customerId, payload)
             
-            const response = {
+            const user = {
                 _id: customer!._id,
                 firstName: customer!.firstName,
                 lastName: customer!.lastName,
@@ -104,7 +104,7 @@ class CustomerController {
                 createdAt: customer!.createdAt,
                 updatedAt: customer!.updatedAt
             }
-            res.status(200).json({success: true , msg:`Customer details successfully updated`, data:  response})
+            res.status(200).json({success: true , msg:`Customer details successfully updated`, data:  user})
         }catch (error){
             if (error instanceof Error ) {
                 res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})
@@ -135,7 +135,7 @@ class CustomerController {
             const payload = req.file
             const customer = await this.uploadAvatar.execute(payload, customerId)
 
-            const response = {
+            const user = {
                 _id: customer!._id,
                 firstName: customer!.firstName,
                 lastName: customer!.lastName,
@@ -147,7 +147,7 @@ class CustomerController {
                 createdAt: customer!.createdAt,
                 updatedAt: customer!.updatedAt
             }
-            res.status(200).json({success: true , msg:`Photo successfully uploaded`, data:  response})
+            res.status(200).json({success: true , msg:`Photo successfully uploaded`, data:  user})
         }catch (error){
             if (error instanceof Error ) {
                 res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})

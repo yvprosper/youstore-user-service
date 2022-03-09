@@ -30,7 +30,7 @@ class CustomerAuth {
         const {token, customer}: {token: string , customer: CustomerDocument} = await this.authenticateCustomer.execute(payload)
 
         //const {password, ...response} = customer
-        const response = {
+        const user = {
             _id: customer?._id,
             firstName: customer?.firstName,
             lastName: customer?.lastName,
@@ -45,7 +45,7 @@ class CustomerAuth {
 
         res.status(200)
         .header('auth-token', token)
-        .json({success: true, msg: `customer successfully logged in`, data: {token , response} })
+        .json({success: true, msg: `customer successfully logged in`, data: {token , user} })
 
         } catch (error) {
             if (error instanceof Error ) {
