@@ -2,7 +2,7 @@ import express from "express";
 import http from "http";
 import Config from "config"
 import log from "./utils/logger";
-
+import cors from 'cors'
 
 
 
@@ -20,6 +20,7 @@ class Server {
         this.express.use(router);
         this.express.use(express.json())
         this.express.app = http.createServer(this.express);
+        this.express.app.use(cors)
        
       }
     
