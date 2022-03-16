@@ -29,7 +29,7 @@ class UploadBanner{
         
             fs.unlinkSync(path)
 
-            const merchant = await MerchantModel.findById(merchantId)
+            const merchant = await MerchantModel.findOne({merchantId:merchantId})
 
             merchant!.storeBanner = url.toString()
 
