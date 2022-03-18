@@ -36,6 +36,7 @@ import Config from "config"
              // verifying merchant password with the one in our database
             const validPass = await bcrypt.compare(password , merchant.password) 
             if (!validPass) throw new Error('Your email or password is incorrect')
+            
      
             //  generating jwt token
             const token = await jwt.sign({

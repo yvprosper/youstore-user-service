@@ -20,6 +20,8 @@ export interface MerchantInput {
 export interface MerchantDocument extends MerchantInput, mongoose.Document {
   createdAt: Date;
   updatedAt: Date;
+  user: any
+  token: string
 }
 
 const merchantSchema = new mongoose.Schema(
