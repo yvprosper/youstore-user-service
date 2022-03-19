@@ -40,7 +40,7 @@ class Auth {
             res.status(200)
             .header('auth-token', token)
             .json({success: true, msg: `merchant successfully logged in`, data: {token , user} })
-        } else {
+        } else if (userType == 'customer') {
             const {token, customer}: {token: string , customer: CustomerDocument} = await this.authenticateCustomer.execute(payload)
             const user = {
                 _id: customer?._id,
@@ -57,6 +57,9 @@ class Auth {
             res.status(200)
             .header('auth-token', token)
             .json({success: true, msg: `customer successfully logged in`, data: {token , user} })
+        } else {
+            res.status(200)
+            .json({success: false, msg: `request query userType must be either "merchant" or "customer"` })
         }
 
         } catch (error) {
