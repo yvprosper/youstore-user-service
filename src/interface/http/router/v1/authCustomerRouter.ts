@@ -15,7 +15,7 @@ router.post('/reset-password' , api('reset'))
 
 router.post('/reset-password/:id/:token', api('verify'))
 
-router.post('/confirmation/:id/:token', api('verifyEmail'))
+router.get('/confirmation/:id/:token', api('verifyEmail'))
 
 
  export default router;
