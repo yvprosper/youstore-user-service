@@ -116,6 +116,7 @@ class CustomerAuth {
             await this.verifyCustomerEmailToken.execute(customerId,token)
             res.status(200)
             .json({success: true, msg: `Email Verification Successful`})
+            res.redirect('http://google.com')
         } catch (error) {
             if (error instanceof Error ) {
                 res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})
