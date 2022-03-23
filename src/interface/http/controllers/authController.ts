@@ -82,12 +82,12 @@ class Auth {
                 const {userType} = req.query
 
                 if (userType == 'customer') {
-                    const {userId} = req.user._id
-                    const user = await this.getCustomer.execute(userId)
+                    const customerId = req.user._id
+                    const user = await this.getCustomer.execute(customerId)
                     res.status(HTTP_STATUS.OK).json({success: true , msg:`Customer details successfully retrieved`, data: user})
                 } else if (userType == 'merchant'){
-                    const {userId} = req.user._id
-                    const user = await this.getMerchant.execute(userId)
+                    const merchantId = req.user._id
+                    const user = await this.getMerchant.execute(merchantId)
                     res.status(HTTP_STATUS.OK).json({success: true , msg:`Merchant details successfully retrieved`, data:  user})
                 }else {
             res.status(400)
