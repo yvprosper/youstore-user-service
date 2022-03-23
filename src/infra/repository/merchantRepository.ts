@@ -88,7 +88,7 @@ import Config from "config"
                 
 
                 //send to Queue
-                this.messenger.sendToQueue(`merchant_deleted`, merchant)
+                this.messenger.sendToQueue(`merchant_deleted`, merchantId)
                 return merchant
             } catch (error) {
                 throw error

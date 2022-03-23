@@ -90,7 +90,7 @@ import Config from "config"
                 
 
                 //send to Queue
-                this.messenger.sendToQueue(`customer_deleted`, customer)
+                this.messenger.sendToQueue(`customer_deleted`, customerId)
                 return customer
             } catch (error) {
                 throw error
