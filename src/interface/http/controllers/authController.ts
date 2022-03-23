@@ -64,7 +64,7 @@ class Auth {
             .header('auth-token', token)
             .json({success: true, msg: `customer successfully logged in`, data: {token , user} })
         } else {
-            res.status(200)
+            res.status(400)
             .json({success: false, msg: `request query userType must be either "merchant" or "customer"` })
         }
 
@@ -82,15 +82,15 @@ class Auth {
                 const {userType} = req.query
 
                 if (userType == 'customer') {
-                    const {userId} = req.params
+                    const {userId} = req.user._id
                     const user = await this.getCustomer.execute(userId)
                     res.status(HTTP_STATUS.OK).json({success: true , msg:`Customer details successfully retrieved`, data: user})
                 } else if (userType == 'merchant'){
-                    const {userId} = req.params
+                    const {userId} = req.user._id
                     const user = await this.getMerchant.execute(userId)
                     res.status(HTTP_STATUS.OK).json({success: true , msg:`Merchant details successfully retrieved`, data:  user})
                 }else {
-            res.status(200)
+            res.status(400)
             .json({success: false, msg: `request query userType must be either "merchant" or "customer"` })
                 }
 
