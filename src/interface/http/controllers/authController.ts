@@ -4,14 +4,20 @@ import AuthenticateMerchant from "../../../usecases/auth/authenticateMerchant";
 import HTTP_STATUS from "http-status-codes"
 import { CustomerDocument } from "../../../infra/database/models/mongoose/customerModel";
 import { MerchantDocument } from "../../../infra/database/models/mongoose/merchantModel";
+import GetCustomer from "../../../usecases/customers/getCustomer";
+import GetMerchant from "../../../usecases/merchants/getMerchant";
 
 class Auth {
     authenticateCustomer: AuthenticateCustomer
     authenticateMerchant: AuthenticateMerchant
-    constructor({authenticateCustomer, authenticateMerchant}: 
-        {authenticateCustomer: AuthenticateCustomer,authenticateMerchant: AuthenticateMerchant}) {
+    getCustomer: GetCustomer
+    getMerchant: GetMerchant
+    constructor({authenticateCustomer, authenticateMerchant, getCustomer, getMerchant}: 
+        {authenticateCustomer: AuthenticateCustomer,authenticateMerchant: AuthenticateMerchant,getCustomer: GetCustomer, getMerchant: GetMerchant}) {
         this.authenticateCustomer = authenticateCustomer
         this.authenticateMerchant = authenticateMerchant
+        this.getCustomer = getCustomer
+        this.getMerchant = getMerchant
     }
 
     async authenticate(req: Request , res: Response) {
@@ -71,7 +77,34 @@ class Auth {
         }
     }
 
-    
+    async fetch (req: Request , res: Response) {
+            try {
+                const {userType} = req.query
+
+                if (userType == 'customer') {
+                    const {userId} = req.params
+                    const user = await this.getCustomer.execute(userId)
+                    res.status(HTTP_STATUS.OK).json({success: true , msg:`Customer details successfully retrieved`, data: user})
+                } else if (userType == 'merchant'){
+                    const {userId} = req.params
+                    const user = await this.getMerchant.execute(userId)
+                    res.status(HTTP_STATUS.OK).json({success: true , msg:`Merchant details successfully retrieved`, data:  user})
+                }else {
+            res.status(200)
+            .json({success: false, msg: `request query userType must be either "merchant" or "customer"` })
+                }
+
+            }catch (error) {
+                if (error instanceof Error ) {
+                    res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})
+                    throw new Error(`${error.message}`)
+                } 
+                
+                throw error
+            }
+
+
+    }
 
 }
 
