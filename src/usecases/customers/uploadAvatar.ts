@@ -30,8 +30,7 @@ class UploadAvatar{
         
             fs.unlinkSync(path)
 
-            const customer = await CustomerModel.findOne({customerId:customerId})
-            console.log(customer)
+            const customer = await CustomerModel.findOne({_id:customerId})
 
             customer!.avatar = url.toString()
 

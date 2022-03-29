@@ -30,7 +30,7 @@ class UploadPhoto{
         
             fs.unlinkSync(path)
 
-            const merchant = await MerchantModel.findOne({merchantId:merchantId})
+            const merchant = await MerchantModel.findOne({_id:merchantId})
 
             merchant!.avatar = url.toString()
 
