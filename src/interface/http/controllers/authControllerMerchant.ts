@@ -130,7 +130,7 @@ class MerchantAuth {
     }
 
     async redirect(req: Request , res: Response){
-        res.redirect('https://youstore-staging.netlify.app/auth/reset-password/')
+        res.redirect('https://youstore-staging.netlify.app/auth/reset-password?user=merchant')
     }
 
 
