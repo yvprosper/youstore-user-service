@@ -14,6 +14,8 @@ router.post('/reset-password' , api('reset'))
 
 router.post('/reset-password/:id/:token', api('verify'))
 
+router.get('/reset-password/:id/:token', api('redirect'))
+
 router.post('/confirmation/:id/:token', api('verifyEmail'))
 
 
