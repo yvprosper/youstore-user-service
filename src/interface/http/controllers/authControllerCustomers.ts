@@ -114,7 +114,7 @@ class CustomerAuth {
             const token = req.params.token
 
             await this.verifyCustomerEmailToken.execute(customerId,token)
-            res.redirect('http://google.com')
+            res.redirect('https://youstore-staging.netlify.app/auth/verify-email/')
             res.status(200)
             .json({success: true, msg: `Email Verification Successful`})
             

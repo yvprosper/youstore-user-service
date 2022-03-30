@@ -117,6 +117,7 @@ class MerchantAuth {
             const token = req.params.token
 
             await this.verifyMerchantEmailToken.execute(merchantId,token)
+            res.redirect('https://youstore-staging.netlify.app/auth/verify-email/')
             res.status(200)
             .json({success: true, msg: `Email Verification Successful`})
         } catch (error) {
