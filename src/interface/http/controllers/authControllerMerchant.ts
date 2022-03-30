@@ -79,10 +79,10 @@ class MerchantAuth {
     async reset(req: Request , res: Response) {
         try {
             const {email} = req.body
-            await this.resetMerchantPassword.execute(email)
+           const link =  await this.resetMerchantPassword.execute(email)
 
             res.status(200)
-            .json({success: true, msg: `The reset link has been sent to your email`})
+            .json({success: true, msg: `The reset link has been sent to your email` , data: link})
 
         } catch (error) {
             if (error instanceof Error ) {
