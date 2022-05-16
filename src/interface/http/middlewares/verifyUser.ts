@@ -23,12 +23,17 @@ export const verifyUser = (req: Request , res: Response , next: NextFunction) =>
         req.user = verified;
     } else if (userType == 'merchant') {
         const secret = process.env.MERCHANT_JWT_SECRET
-        // verify token and save customer Id to the verified variable
+        // verify token and save merchant Id to the verified variable
+        const verified = jwt.verify(token, `${secret}` )
+        req.user = verified;
+    } else if (userType == 'admin') {
+        const secret = process.env.ADMIN_JWT_SECRET
+        // verify token and save admin Id to the verified variable
         const verified = jwt.verify(token, `${secret}` )
         req.user = verified;
     }else {
          res.status(400)
-            .json({success: false, msg: `request query userType must be either "merchant" or "customer"` })
+            .json({success: false, msg: `request query userType must be either "merchant" or "customer" or "admin"` })
         }
 
     next()

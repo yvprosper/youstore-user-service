@@ -20,8 +20,10 @@ const config = {
     //JWT
     customerSecret: process.env.CUSTOMER_JWT_SECRET,
     merchantSecret: process.env.MERCHANT_JWT_SECRET,
+    adminSecret: process.env.ADMIN_JWT_SECRET,
     customerReset: process.env.CUS_RESET_PASSWORD_SECRET,
     merchantReset: process.env.MER_RESET_PASSWORD_SECRET,
+    adminReset: process.env.ADM_RESET_PASSWORD_SECRET,
     customerEmailSecret: process.env.CUS_EMAIL_SECRET,
     merchantEmailSecret: process.env.MER_EMAIL_SECRET,
     
