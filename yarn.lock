@@ -325,6 +325,13 @@ agent-base@6, agent-base@^6.0.0, agent-base@^6.0.2:
   dependencies:
     debug "4"
 
+amqp-connection-manager@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/amqp-connection-manager/-/amqp-connection-manager-4.1.1.tgz#15ddc23b823ebba133efbe6629fba6d57cdd5f15"
+  integrity sha512-vkEwurqrVu4O44+lmGZHJs2pPWHU746lc81UCrp+IYusBt+F09rVMjgBPnTv28NzkC+9HhQUIEz80xwTpz0bYA==
+  dependencies:
+    promise-breaker "^5.0.0"
+
 amqplib@^0.8.0:
   version "0.8.0"
   resolved "https://registry.yarnpkg.com/amqplib/-/amqplib-0.8.0.tgz#088d10bc61cc5ac5a49ac72033c7ac66c23aeb61"
@@ -2125,6 +2132,11 @@ process-nextick-args@~2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-2.0.1.tgz#7820d9b16120cc55ca9ae7792680ae7dba6d7fe2"
   integrity sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==
+
+promise-breaker@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/promise-breaker/-/promise-breaker-5.0.0.tgz#58e8541f1619554057da95a211794d7834d30c1d"
+  integrity sha512-mgsWQuG4kJ1dtO6e/QlNDLFtMkMzzecsC69aI5hlLEjGHFNpHrvGhFi4LiK5jg2SMQj74/diH+wZliL9LpGsyA==
 
 proxy-addr@~2.0.7:
   version "2.0.7"
