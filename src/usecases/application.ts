@@ -3,6 +3,10 @@ import database from "../infra/database/mongoose"
 import log from "../interface/http/utils/logger";
 import Config from "config"
 import Messenger from "../infra/libs/rabbitmq";
+//import channelWrapper from "../../consumer";
+
+
+
 
 class Application {
     restServer: restServer;
@@ -31,6 +35,11 @@ class Application {
         
         this.logger.info('connecting to rabbitMq...')
         await this.messenger.createChannel()
+        //this.messenger.consumeOrderComplete()
+        
+        // channelWrapper.waitForConnect().then(() => {
+        //     console.log('listening for messages')
+        // })
         await this.restServer.start();
     }
 

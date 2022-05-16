@@ -12,6 +12,7 @@ export interface MerchantInput {
   bankName: string;
   accountNo: string;
   accountName: string
+  accountBalance: number
   isVerified: boolean
   password: string;
 
@@ -38,6 +39,10 @@ const merchantSchema = new mongoose.Schema(
   },
    accountName: { 
     type: String,
+  },
+  accountBalance: { 
+    type: Number,
+      default: 0
   },
     phoneNo: { 
         type: String, 
@@ -74,6 +79,6 @@ const merchantSchema = new mongoose.Schema(
   }
 );
 
-const MerchantModel = mongoose.model<MerchantDocument>("Merchant", merchantSchema);
+const MerchantModel = mongoose.models.Merchant || mongoose.model<MerchantDocument>("Merchant", merchantSchema);
 
 export default MerchantModel;

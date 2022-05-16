@@ -37,7 +37,6 @@ import Config from "config"
                 //send to Queue
                 this.messenger.sendToQueue(`verify_merchant_email`, {link, saveMerchant})
 
-
                 return saveMerchant
             } catch (error) {
                 throw error
