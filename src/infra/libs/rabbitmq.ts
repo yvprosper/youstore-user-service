@@ -29,7 +29,7 @@ export class Messenger implements IMessenger {
     this.logger.info('connected to rabbitMq')
     await this.channel.assertExchange('orderEvents', 'topic')
     await this.assertQueue('update_account_balance')
-    await this.channel.bindQueue('update_account_balance', 'orderEvents', 'orders.status.success')
+    await this.channel.bindQueue('update_account_balance', 'orderEvents', 'orders.status.completed')
     this.consumeOrderComplete()
   }
   async assertQueue(queue: string): Promise<void> {
@@ -55,10 +55,12 @@ export class Messenger implements IMessenger {
     this.channel.consume(`update_account_balance`, async (messageBuffer: Message | null) => {
       const msg = messageBuffer;
       const routingKey = msg?.fields.routingKey
-      if (routingKey !== 'orders.status.success') return
+      if (routingKey !== 'orders.status.completed') return
 
       const message = JSON.parse(msg!.content.toString());
+      console.log(message)
       
+      try {
       message.order.products.map(async (item: any)=> {
           const merchantId = item.merchantId
           let merchant = await MerchantModel.findOne({_id: merchantId})
@@ -67,7 +69,10 @@ export class Messenger implements IMessenger {
           merchant!.save()
           console.log(`Merchant Account Balance updated \n ${merchant}`)
           
-      })    
+      })
+    } catch (error) {
+      throw error
+    }    
   
 }, {noAck: true})
 }

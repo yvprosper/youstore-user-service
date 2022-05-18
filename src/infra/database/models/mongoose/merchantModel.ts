@@ -13,7 +13,8 @@ export interface MerchantInput {
   accountNo: string;
   accountName: string
   accountBalance: number
-  isVerified: boolean
+  isVerified: boolean;
+  isRestricted: boolean;
   password: string;
 
 }
@@ -66,6 +67,10 @@ const merchantSchema = new mongoose.Schema(
         required: true 
     },
     isVerified: { 
+      type: Boolean, 
+      default: false 
+    },
+    isRestricted: { 
       type: Boolean, 
       default: false 
     },
