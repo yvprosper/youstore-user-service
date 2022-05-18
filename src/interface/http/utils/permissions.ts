@@ -6,7 +6,7 @@ const superAdminPermissions = [
             "create-admin",
             "view-users",
             "view-admins",
-            "sanction-users",
+            "sanction-merchants",
             "sanction-admins",
             "mark-delivery-status",
             "view-orders",
@@ -23,7 +23,7 @@ const adminPermissions = [
         permissions: [
             "view-users",
             "view-orders",
-            "sanction-users"
+            "sanction-merchants"
         ]
 
     }

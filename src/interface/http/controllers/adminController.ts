@@ -8,6 +8,10 @@ import DeleteAdmin from "../../../usecases/admin/deleteAdmin";
 import AdminRepository from "../../../infra/repository/customerRepository";
 import GetUsers from "../../../usecases/admin/getUsers";
 import GetOneUser from "../../../usecases/admin/getOneUser";
+import RestrictAdmin from "../../../usecases/admin/restrictAdmin";
+import RestrictMerchant from "../../../usecases/admin/restrictMerchant";
+import UnBanAdmin from "../../../usecases/admin/unBanAdmin";
+import UnBanMerchant from "../../../usecases/admin/unBanMerchant";
 import UploadAdminAvatar from "../../../usecases/admin/uploadAdminAvatar";
 import { AdminDocument } from "../../../infra/database/models/mongoose/adminModel";
 
@@ -22,9 +26,13 @@ class AdminController {
     updateAdmin: UpdateAdmin
     uploadAdminAvatar: UploadAdminAvatar
     adminRepository: AdminRepository
-    constructor({createAdmin, adminRepository, completeSignUp , getUsers,getOneUser, updateAdmin, deleteAdmin, uploadAdminAvatar}: 
-        {createAdmin: CreateAdmin, completeSignUp: CompleteSignUp, updateAdmin: UpdateAdmin, deleteAdmin: DeleteAdmin
-        getUsers: GetUsers,getOneUser: GetOneUser, adminRepository: AdminRepository, uploadAdminAvatar: UploadAdminAvatar}) {
+    restrictMerchant: RestrictMerchant
+    restrictAdmin: RestrictAdmin
+    unBanAdmin: UnBanAdmin
+    unBanMerchant: UnBanMerchant
+    constructor({createAdmin, adminRepository, completeSignUp , getUsers,getOneUser, updateAdmin, deleteAdmin,restrictMerchant,restrictAdmin,uploadAdminAvatar,unBanAdmin,unBanMerchant}: 
+        {createAdmin: CreateAdmin, completeSignUp: CompleteSignUp, updateAdmin: UpdateAdmin, deleteAdmin: DeleteAdmin,unBanAdmin: UnBanAdmin, unBanMerchant: UnBanMerchant
+        getUsers: GetUsers,getOneUser: GetOneUser, adminRepository: AdminRepository, uploadAdminAvatar: UploadAdminAvatar,restrictMerchant: RestrictMerchant, restrictAdmin: RestrictAdmin}) {
         this.createAdmin = createAdmin
         this.completeSignUp = completeSignUp
         this.getUsers = getUsers
@@ -32,6 +40,10 @@ class AdminController {
         this.updateAdmin = updateAdmin
         this.deleteAdmin = deleteAdmin
         this.uploadAdminAvatar = uploadAdminAvatar
+        this.restrictMerchant = restrictMerchant
+        this.restrictAdmin = restrictAdmin
+        this.unBanAdmin = unBanAdmin
+        this.unBanMerchant = unBanMerchant
         this.adminRepository = adminRepository
     } 
 
@@ -66,8 +78,22 @@ class AdminController {
     async completeRegisteration(req: Request , res: Response) {
         try {
             const payload = req.body
-            const admin = await this.completeSignUp.execute(payload)
-            res.status(HTTP_STATUS.OK).json({success: true , msg:`admin successfully completed signUp`, data:  admin})
+            const admin: any = await this.completeSignUp.execute(payload)
+
+            const user = {
+                _id: admin?._id,
+                firstName: admin?.firstName,
+                lastName: admin?.lastName,
+                role: admin?.role,
+                permissions: admin?.permissions,
+                avatar: admin?.avatar,
+                phoneNo: admin?.phoneNo,
+                email: admin?.email,
+                hasCompletedSignUp: admin?.hasCompletedSignUp,
+                createdAt: admin?.createdAt,
+                updatedAt: admin?.updatedAt
+            }
+            res.status(HTTP_STATUS.OK).json({success: true , msg:`admin successfully completed signUp`, data:  user})
         }catch (error){
             if (error instanceof Error ) {
                 res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})
@@ -78,10 +104,26 @@ class AdminController {
     }
 
 
-    async getAll(req: Request , res: Response) {
+    async getAllUsers(req: Request , res: Response) {
         try {
             const payload = {}
-            const userType = req.query
+            const {userType} = req.query
+            const users = await this.getUsers.execute(payload, userType)
+            res.status(200).json({success: true , msg:`All ${userType} details successfully retrieved`, data:  users})
+        }catch (error){
+            if (error instanceof Error ) {
+                res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})
+                throw new Error(`${error.message}`)
+            } 
+            throw error
+        }
+    }
+
+
+    async getAllAdmins(req: Request , res: Response) {
+        try {
+            const payload = {}
+            const userType = 'admin'
             const users = await this.getUsers.execute(payload, userType)
             res.status(200).json({success: true , msg:`All ${userType} details successfully retrieved`, data:  users})
         }catch (error){
@@ -97,9 +139,90 @@ class AdminController {
     async get(req: Request , res: Response) {
         try {
             const userId = req.params.userId
-            const userType = req.query
+            const {userType} = req.query
             const user = await this.getOneUser.execute(userId, userType)
             res.status(HTTP_STATUS.OK).json({success: true , msg:`${userType} details successfully retrieved`, data:  user})
+        }catch (error){
+            if (error instanceof Error ) {
+                res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})
+                throw new Error(`${error.message}`)
+            } 
+            throw error
+        }
+    }
+
+    async sanctionMerchant(req: Request , res: Response) {
+        try {
+            const email = req.body.email
+            const {type} = req.query
+
+            if (type === `temporary`) {
+                const user = await this.restrictMerchant.temporary(email)
+                res.status(HTTP_STATUS.OK).json({success: true , msg:` Merchant with ID: ${user._id} has been temporarily restricted`, data:  user})
+            } else if (type === `permanent`) {
+                const user = await this.restrictMerchant.permanent(email)
+                res.status(HTTP_STATUS.OK).json({success: true , msg:` Merchant with ID: ${user._id} has been disabled`, data:  user})
+            } else {
+                res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`Type can only be temporary or permanent`})
+            }
+              
+        }catch (error){
+            if (error instanceof Error ) {
+                res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})
+                throw new Error(`${error.message}`)
+            } 
+            throw error
+        }
+    }
+
+
+    async sanctionAdmin(req: Request , res: Response) {
+        try {
+            const email = req.body.email
+            const {type} = req.query
+
+            if (type === `temporary`) {
+                const user = await this.restrictAdmin.temporary(email)
+                res.status(HTTP_STATUS.OK).json({success: true , msg:` Admin with ID: ${user!._id} has been temporarily restricted`, data:  user})
+            } else if (type === `permanent`) {
+                const user = await this.restrictAdmin.permanent(email)
+                res.status(HTTP_STATUS.OK).json({success: true , msg:` Admin with ID: ${user._id} has been disabled`, data:  user})
+            } else {
+                res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`Type can only be temporary or permanent`})
+            }
+              
+        }catch (error){
+            if (error instanceof Error ) {
+                res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})
+                throw new Error(`${error.message}`)
+            } 
+            throw error
+        }
+    }
+
+
+    async unRestrictAdmin(req: Request , res: Response) {
+        try {
+            const email = req.body.email
+            const user = await this.unBanAdmin.unban(email)
+            res.status(HTTP_STATUS.OK).json({success: true , msg:` Admin with ID: ${user!._id} has been unbanned`, data:  user})
+              
+        }catch (error){
+            if (error instanceof Error ) {
+                res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})
+                throw new Error(`${error.message}`)
+            } 
+            throw error
+        }
+    }
+
+
+    async unRestrictMerchant(req: Request , res: Response) {
+        try {
+            const email = req.body.email
+            const user = await this.unBanMerchant.unban(email)
+            res.status(HTTP_STATUS.OK).json({success: true , msg:` Admin with ID: ${user!._id} has been unbanned`, data:  user})
+              
         }catch (error){
             if (error instanceof Error ) {
                 res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})

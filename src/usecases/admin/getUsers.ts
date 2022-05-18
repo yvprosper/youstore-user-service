@@ -24,10 +24,10 @@ class GetUsers{
             } else if (userType == 'merchant') {
                 const merchants =  await this.merchantRepository.getAll(payload)
                 return merchants
-            } else if (userType == 'admin') {
+            } else if (userType == 'customer') {
                 const customers =  await this.customerRepository.getAll(payload)
                 return customers
-            } else return new Error(`request query userType must be either "merchant" or "customer" or "admin"`)
+            } else throw new Error(`request query userType must be either "merchant" or "customer" or "admin"`)
            
            
         } catch (error) {

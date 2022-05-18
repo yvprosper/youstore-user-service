@@ -36,6 +36,9 @@ import Config from "config"
              // verifying merchant password with the one in our database
             const validPass = await bcrypt.compare(password , merchant.password) 
             if (!validPass) throw new Error('Your email or password is incorrect')
+
+            //checking if the merchant's account is disabled
+            if (merchant.isRestricted) throw new Error('Your account has been temporarily disabled, contact support')
             
      
             //  generating jwt token

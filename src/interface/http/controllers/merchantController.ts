@@ -80,6 +80,20 @@ class MerchantController {
         }
     }
 
+    async getOne(req: Request , res: Response) {
+        try {
+            const merchantId = req.params.merchantId
+            const merchant = await this.getMerchant.execute(merchantId)
+            res.status(HTTP_STATUS.OK).json({success: true , msg:`Merchant details successfully retrieved`, data:  merchant})
+        }catch (error){
+            if (error instanceof Error ) {
+                res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})
+                throw new Error(`${error.message}`)
+            } 
+            throw error
+        }
+    }
+
 
     async getAll(req: Request , res: Response) {
         try {

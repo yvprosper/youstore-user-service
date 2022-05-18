@@ -15,7 +15,8 @@ router
      .delete(verifyMerchant, api('delete'))
 
      
- router.get("/one",verifyMerchant, api('get') ) 
+ router.get("/one",verifyMerchant, api('get') )
+ router.get("/one/:merchantId", api('getOne') ) 
  router.post('/upload',verifyMerchant, upload.single('avatar'), api('upload') )
  router.post('/upload-banner',verifyMerchant, upload.single('banner'), api('uploadStoreBanner') )
 

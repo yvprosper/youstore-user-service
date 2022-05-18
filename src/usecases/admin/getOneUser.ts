@@ -19,15 +19,15 @@ class GetOneUser{
     async execute(userId: String, userType: any) {
         try {
             if (userType == 'admin') {
-                const admins =  await this.adminRepository.get(userId)
-                return admins
+                const admin =  await this.adminRepository.get(userId)
+                return admin
             } else if (userType == 'merchant') {
-                const merchants =  await this.merchantRepository.get(userId)
-                return merchants
+                const merchant =  await this.merchantRepository.get(userId)
+                return merchant
             } else if (userType == 'admin') {
-                const customers =  await this.customerRepository.get(userId)
-                return customers
-            } else return new Error(`request query userType must be either "merchant" or "customer" or "admin"`)
+                const customer =  await this.customerRepository.get(userId)
+                return customer
+            } else throw new Error(`request query userType must be either "merchant" or "customer" or "admin"`)
            
            
         } catch (error) {

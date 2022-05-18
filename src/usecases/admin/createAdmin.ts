@@ -27,7 +27,7 @@ import log from "../../interface/http/utils/logger"
             const {email} = payload
 
             const alreadyExist = await this.adminModel.findOne({email: email})
-            if (alreadyExist) throw new conflictError('A Admin with this Email already exist',HTTP_STATUS.CONFLICT,`error`)
+            if (alreadyExist) throw new conflictError('An Admin with this Email already exist',HTTP_STATUS.CONFLICT,`error`)
 
             const admin = await this.adminRepository.signUp(payload)
             return admin

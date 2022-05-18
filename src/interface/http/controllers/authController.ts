@@ -202,6 +202,10 @@ class Auth {
         }
     }
 
+    async redirect(req: Request , res: Response){
+        res.redirect('https://youstore-staging.netlify.app/auth/reset-password?user=admin')
+    }
+
 
 }
 

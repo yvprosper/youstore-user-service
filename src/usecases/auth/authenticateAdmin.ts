@@ -36,6 +36,9 @@ import Config from "config"
              // verifying customer password with the one in our database
             const validPass = await bcrypt.compare(password , admin.password) 
             if (!validPass) throw new Error('Your email or password is incorrect')
+
+            //checking if the admin's account is disabled
+            if (admin.isRestricted) throw new Error('Your account has been temporarily disabled, contact support')
      
             //  generating jwt token
             const token = await jwt.sign({

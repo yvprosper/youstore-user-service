@@ -10,6 +10,15 @@ const router = express.Router();
 router.post('/', api('authenticate'))
 router.get('/user', verifyUser, api('fetch'))
 
+router.put("/admin/change-password",verifyUser ,api('changePassword'))
+
+router.post('/admin/reset-password' , api('reset'))
+
+router.post('/admin/reset-password/:id/:token', api('verify'))
+
+router.get('/admin/reset-password/:id/:token', api('redirect'))
+
+
 
 
 export default router;

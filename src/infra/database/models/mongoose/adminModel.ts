@@ -9,6 +9,7 @@ export interface AdminInput {
   email: string;
   password: string;
   hasCompletedSignUp: boolean;
+  isRestricted: boolean;
   role: string;
   permissions: string[];
 
@@ -47,6 +48,10 @@ const adminSchema = new mongoose.Schema(
         trim: true,
     },
     hasCompletedSignUp: { 
+      type: Boolean, 
+      default: false 
+    },
+    isRestricted: { 
       type: Boolean, 
       default: false 
     },
