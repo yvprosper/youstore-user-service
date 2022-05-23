@@ -97,8 +97,22 @@ class MerchantController {
 
     async getAll(req: Request , res: Response) {
         try {
-            const payload = {}
+            const payload = req.query
             const merchants = await this.getMerchants.execute(payload)
+            res.status(200).json({success: true , msg:`merchants successfully retrieved`,  data: merchants})
+        }catch (error){
+            if (error instanceof Error ) {
+                res.status(HTTP_STATUS.BAD_REQUEST).json({success: false , msg:`${error.message}`})
+                throw new Error(`${error.message}`)
+            } 
+            throw error
+        }
+    }
+
+    async getCategory(req: Request , res: Response) {
+        try {
+            const {category, page, limit} = req.query
+            const merchants = await this.getMerchants.execute({category, page, limit,filter:true})
             res.status(200).json({success: true , msg:`merchants successfully retrieved`,  data: merchants})
         }catch (error){
             if (error instanceof Error ) {
@@ -127,6 +141,9 @@ class MerchantController {
                 accountName: merchant!.accountName,
                 accountNo: merchant!.accountNo,
                 isVerified: merchant!.isVerified,
+                category: merchant!.category,
+                orderFufillmentRate: merchant!.orderFufillmentRate,
+                customerRating: merchant!.customerRating,
                 createdAt: merchant!.createdAt,
                 updatedAt: merchant!.updatedAt
             }

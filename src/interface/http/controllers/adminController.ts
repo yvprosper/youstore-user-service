@@ -17,6 +17,7 @@ import { AdminDocument } from "../../../infra/database/models/mongoose/adminMode
 
 
 
+
 class AdminController {
     createAdmin: CreateAdmin
     completeSignUp: CompleteSignUp
@@ -106,7 +107,7 @@ class AdminController {
 
     async getAllUsers(req: Request , res: Response) {
         try {
-            const payload = {}
+            const payload = req.query
             const {userType} = req.query
             const users = await this.getUsers.execute(payload, userType)
             res.status(200).json({success: true , msg:`All ${userType} details successfully retrieved`, data:  users})
@@ -122,7 +123,7 @@ class AdminController {
 
     async getAllAdmins(req: Request , res: Response) {
         try {
-            const payload = {}
+            const payload = req.body
             const userType = 'admin'
             const users = await this.getUsers.execute(payload, userType)
             res.status(200).json({success: true , msg:`All ${userType} details successfully retrieved`, data:  users})

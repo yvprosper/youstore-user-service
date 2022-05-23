@@ -73,7 +73,7 @@ class CustomerController {
 
     async getAll(req: Request , res: Response) {
         try {
-            const payload = {}
+            const payload = req.query
             const customers = await this.getCustomers.execute(payload)
             res.status(200).json({success: true , msg:`AllCustomer details successfully retrieved`, data:  customers})
         }catch (error){

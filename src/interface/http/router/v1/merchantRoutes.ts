@@ -14,7 +14,7 @@ router
      .put(verifyMerchant, api('update'))
      .delete(verifyMerchant, api('delete'))
 
-     
+ router.get('/category', api('getCategory')) 
  router.get("/one",verifyMerchant, api('get') )
  router.get("/one/:merchantId", api('getOne') ) 
  router.post('/upload',verifyMerchant, upload.single('avatar'), api('upload') )

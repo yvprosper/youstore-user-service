@@ -57,9 +57,10 @@ import Config from "config"
     }
 
 
-    async getAll (payload: Object) {
+    async getAll (payload: any) {
         try {
-            const customers = await this.customerModel.find(payload, {password: 0})
+            const {page = 1 , limit = 10 } = payload; 
+            const customers = await this.customerModel.find({}, {password: 0}).limit(limit * 1).skip((page - 1) * limit)
             return customers
         } catch (error) {
            throw error

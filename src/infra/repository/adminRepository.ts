@@ -7,6 +7,7 @@ import Messenger from "../libs/rabbitmq"
 import Config from "config"
 
 
+
   class AdminRepository {
     adminModel: typeof AdminModel
     logger: typeof log
@@ -83,9 +84,10 @@ import Config from "config"
     }
 
 
-    async getAll (payload: Object) {
+    async getAll (payload: any) {
         try {
-            const admins = await this.adminModel.find(payload, {password: 0})
+            const {page = 1 , limit = 10 } = payload;
+            const admins = await this.adminModel.find({}, {password: 0}).limit(limit * 1).skip((page - 1) * limit)
             return admins
         } catch (error) {
            throw error
