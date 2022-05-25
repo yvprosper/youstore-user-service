@@ -87,7 +87,7 @@ import Config from "config"
     async getAll (payload: any) {
         try {
             const {page = 1 , limit = 10 } = payload;
-            const admins = await this.adminModel.find({}, {password: 0}).limit(limit * 1).skip((page - 1) * limit)
+            const admins = await this.adminModel.find({hasCompletedSignUp: true}, {password: 0}).limit(limit * 1).skip((page - 1) * limit)
             return admins
         } catch (error) {
            throw error
