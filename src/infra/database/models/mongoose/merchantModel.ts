@@ -13,6 +13,9 @@ export interface MerchantInput {
   accountNo: string;
   accountName: string
   accountBalance: number
+  orderFufillmentRate: string
+  customerRating: string 
+  category: string[]
   isVerified: boolean;
   isRestricted: boolean;
   password: string;
@@ -66,6 +69,20 @@ const merchantSchema = new mongoose.Schema(
         type: String, 
         required: true 
     },
+    orderFufillmentRate: { 
+      type: String, 
+      default: `excellent`,
+      enum: ['good', 'bad', 'fair', `excellent`]
+    },
+    customerRating: { 
+      type: String, 
+      default: `excellent`,
+      enum: ['good', 'bad', 'fair', `excellent`]
+    },
+    category: [{ 
+      type: String,
+      enum: ['gaming', 'fashion', 'homeAndOffices', `phonesAndTablets`, `electronics`, `computing`] 
+    }],
     isVerified: { 
       type: Boolean, 
       default: false 

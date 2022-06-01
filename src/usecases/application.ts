@@ -35,7 +35,7 @@ class Application {
         
         this.logger.info('connecting to rabbitMq...')
         await this.messenger.createChannel()
-        this.messenger.consumeOrderComplete()
+        //this.messenger.consumeOrderComplete()
         
         // channelWrapper.waitForConnect().then(() => {
         //     console.log('listening for messages')

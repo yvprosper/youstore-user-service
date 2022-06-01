@@ -16,6 +16,11 @@ export interface IresetPassword {
   newPassword: string;
 }
 
+export interface Iquery {
+  page: number;
+  limit: number;
+}
+
 
 // validation for creating a customer
 export const createCustomerSchema = (user: CustomerDocument) => {

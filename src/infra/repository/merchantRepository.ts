@@ -55,9 +55,16 @@ import Config from "config"
     }
 
 
-    async getAll (payload: Object) {
+    async getAll (payload: any) {
         try {
-            const merchants = await this.merchantModel.find(payload, {password: 0})
+            const{filter, category, page = 1 , limit = 10} = payload
+            if (filter) {
+             const merchants = await this.merchantModel.find({category:category}, {password: 0}).find().limit(limit * 1).skip((page - 1) * limit)
+             //if (!merchants) throw new Error(`No merchants under this category`)
+             return merchants
+            }
+            
+            const merchants = await this.merchantModel.find({}, {password: 0}).find().limit(limit * 1).skip((page - 1) * limit)
             return merchants
         } catch (error) {
             throw error
@@ -68,7 +75,18 @@ import Config from "config"
 
     async update (merchantId: String, payload: MerchantDocument) {
         try {
-            const merchant = await this.merchantModel.findOneAndUpdate({_id: merchantId}, payload, {
+            
+            let {category,storeName,address,phoneNo,bankName,accountName,accountNo} = payload
+
+            let merch = await this.merchantModel.findById(merchantId)
+            merch.category.map((c: string[]) => {
+                if (c === category) throw new Error(`duplicate category detected for this merchant`)
+            })
+
+            merch.category.push(category)
+            await merch.save()
+            
+            const merchant = await this.merchantModel.findOneAndUpdate({_id: merchantId}, {storeName,address,phoneNo,bankName,accountName,accountNo}, {
                 new: true
             } )
 
